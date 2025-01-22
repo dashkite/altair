@@ -1,0 +1,42 @@
+no current profile: >-
+  Profile.current is undefined
+
+invalid resource: >-
+  No matching resource named [ ${ name } ] for origin [ ${ origin } ]
+
+unsupported method: >-
+  Unsupported method for resource [ ${name} ] and method [ ${ method } ]
+
+unexpected status: >-
+  The response returned status [ ${ response.status } ]
+  for resource [ ${name} ] and method [ ${ method } ]
+  which is either unexpected or an error
+
+no matching grant: >-
+  No matching grant
+  for resource [ ${name} ] and method [ ${ method } ]
+  (for domain [ ${ domain } ])
+
+unsupported authorization type: >-
+  Unsupported authorization type [ ${type} ]
+  for resource [ ${name} ] and method [ ${ method } ]
+
+content-type mismatch: >-
+  Mismatch between content-type and content
+  for resource [ ${name} ] and method [ ${ method } ]
+
+unexpected content type: >-
+  Mismatch between accept and content-type
+  for resource [ ${name} ] and method [ ${ method } ]
+
+sigil requires body: >-
+  Sigil authorization type specified but no content was provided
+  for resource [ ${name} ] and method [ ${ method } ]
+
+discovery failure: >-
+  Discovery failure for [ ${ origin } ]
+
+authorization failure: >-
+  Authorization failure
+  for resource [ ${name} ] and method [ ${ method } ]
+  at origin [ ${ origin } ]

@@ -41,5 +41,18 @@
     "@dashkite/genie-coffee": "link:../genie-coffee"
   },
   "dependencies": {
+    "@dashkite/bake": "^0.0.6",
+    "@dashkite/events": "^0.1.0",
+    "@dashkite/helium": "^0.4.4",
+    "@dashkite/http-headers": "link:../http-headers",
+    "@dashkite/joy": "^0.3.16",
+    "@dashkite/katana": "^0.4.8",
+    "@dashkite/media-type": "link:../media-type",
+    "@dashkite/profile": "link:../profile",
+    "@dashkite/runes-client": "link:../runes-client",
+    "@dashkite/sierra": "link:../sierra",
+    "@dashkite/talos": "link:../talos",
+    "@dashkite/url-codex": "link:../url-codex",
+    "panda-confidential": "^3.1.2"
   }
 }
