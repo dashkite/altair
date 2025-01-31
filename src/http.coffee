@@ -22,6 +22,7 @@ HTTP =
       yield
         when: ( condition ) -> When[ condition ] talos
         get: ( target ) -> Get[ target ] talos
+        talos: talos
     return
 
 export default HTTP

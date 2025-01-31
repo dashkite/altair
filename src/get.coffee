@@ -22,5 +22,8 @@ Get =
   "authorization scheme": ( talos ) ->
     ( Get[ "request authorization" ] talos )?.scheme
 
+  "location": ( talos ) ->
+    talos.context.sublime.response.headers.get "location"
+
 export default Get
 export { Get }

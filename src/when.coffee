@@ -17,6 +17,10 @@ When =
   failure: ( talos ) ->
     ( When.name talos, "issue" ) && talos.failure
 
+  created: ( talos ) ->
+    ( When.success talos ) &&
+      ( talos.context.sublime?.response?.status == 201 )
+
   "response content is json": ( talos ) ->
     ( When.success talos ) &&
       ( talos.context.sublime?.response?.contentCategory == "json" )

@@ -23,7 +23,6 @@
       "node": "./build/node/src/index.js"
     }
   },
-  "main": "build/node/src/index.js",
   "files": [
     "build/browser/src",
     "build/node/src"
@@ -43,6 +42,7 @@
   "dependencies": {
     "@dashkite/bake": "^0.0.6",
     "@dashkite/events": "^0.1.0",
+    "@dashkite/genie-module": "link:../genie-module",
     "@dashkite/helium": "^0.4.4",
     "@dashkite/http-headers": "link:../http-headers",
     "@dashkite/joy": "^0.3.16",
