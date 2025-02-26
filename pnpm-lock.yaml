@@ -14,9 +14,6 @@ importers:
       '@dashkite/events':
         specifier: ^0.1.0
         version: 0.1.0
-      '@dashkite/genie-module':
-        specifier: link:../genie-module
-        version: link:../genie-module
       '@dashkite/helium':
         specifier: ^0.4.4
         version: 0.4.4
@@ -69,6 +66,9 @@ importers:
       '@dashkite/genie-coffee':
         specifier: link:../genie-coffee
         version: link:../genie-coffee
+      '@dashkite/genie-module':
+        specifier: link:../genie-module
+        version: link:../genie-module
 
 packages:
 
