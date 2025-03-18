@@ -23,10 +23,12 @@ Sky =
       throw new Error "invalid resource #{ name }"
 
   method: Fn.curry ( name, talos ) ->
+    talos.context.method = name
     if ( signatures = talos.context.resource?.methods?[ name ] )?
-      talos.context.method = name
       talos.context.signatures = signatures
     else
+      talos.context.failure = "method not allowed"
+      # TODO use HTTP status codes
       throw new Error "unsupported method #{ name }"
 
   target: Fn.curry ( bindings, talos ) ->

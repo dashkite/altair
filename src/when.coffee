@@ -46,6 +46,9 @@ When =
   previous: ( talos, state ) ->
     talos.previousState == state
 
+  "method not allowed": ( talos, state ) ->
+    talos.failure && talos.context.failure == "method not allowed"
+
   # TODO confirm that this is the right way to detect a network error
   "network error": ( talos ) ->
     talos.failure && talos.error.message == "Failure to fetch"

@@ -1,4 +1,6 @@
 Get =
+
+  "method": ( talos ) -> talos.context.method
   
   "failure error": ( talos ) -> talos.error
 
