@@ -6,15 +6,11 @@ import { MediaType } from "@dashkite/media-type"
 
 
 When =
-  # TODO what kind of precesion should we bring here? Content-Length is probably
-  # the answer, but for values written into the HTTP cache, we don't currently 
-  # do the math to calculate a content-length. Right now, we're relying on good
-  # grammar. Don't send a content-type header if there is no content. But is
-  # that reasonable?
+
   hasContent: ( talos ) ->
     ( talos.context.response.headers.get "content-type" )? &&
-      ( 0 < talos.context.response.headers.get "content-length" )
-
+      (( !( talos.context.response.headers.get "content-length" )? ||
+        (( talos.context.response.headers.get "content-length" ) > 0 )))
 
 Run =
   parseBasics: ( talos ) ->

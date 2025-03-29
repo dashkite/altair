@@ -13,7 +13,7 @@ build/browser/src/utils.js: D5_k6Cp_
 build/browser/src/issue.js: rAPajfMZ
 build/browser/src/errors.js: xtqrlr5i
 build/browser/src/sky.js: q3o-DBkk
-build/browser/src/vega-sky/response.js: kSmHS8nt
+build/browser/src/vega-sky/response.js: 51iep2Gg
 build/browser/src/vega-sky/cache.js: 03sdjIzp
 build/browser/src/vega-core/index.js: DbOgwMDB
 build/browser/src/vega-sky/headers/authorization/literal.js: 13rQfQtr
@@ -22,3 +22,5 @@ build/browser/src/vega-sky/headers/authorization/rune.js: o3HXqXD-
 build/browser/src/vega-core/credentials.js: IajUWfhs
 build/browser/src/when.js: LJ5HZlsy
 build/browser/src/vega-sky/headers/authorization/index.js: CYJw-wFY
+build/browser/src/ajax.js: J6ugA3HL
+build/browser/src/ajax/index.js: 7jw1aNAF
