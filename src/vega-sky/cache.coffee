@@ -19,7 +19,6 @@ Cache =
     VegaCache ?= await window.caches.open "vega-client"
     url = context.url.href
     body = context.body
-    # TODO: we need a legitimate content-length calcluation here.
     headers = 
       "content-type": context.headers[ "content-type" ]
       "content-length": "100"

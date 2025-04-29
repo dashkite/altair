@@ -14,7 +14,6 @@ When =
     
 
 Run =
-  # TODO: Do we want to split off signature matching into separate state?
   getURL: ( talos ) ->
     for await current from URL.make talos.context
       yield current

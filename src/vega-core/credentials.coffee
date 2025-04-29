@@ -48,7 +48,6 @@ Credentials =
     else
       [ authorization ]
 
-  # TODO: Do we need the second Profile.load for identity?
   prune: ( context ) ->
     { authorization } = context.sublime.request.headers
     { domain, resource, method } = context.sublime.response.content

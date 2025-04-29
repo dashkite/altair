@@ -1,6 +1,5 @@
 import Altair from "../index"
 
-# TODO add comprehensive event handlers
 
 HTTP =
 
@@ -13,7 +12,6 @@ HTTP =
       else if event.when "method not allowed"
         yield { name: "method not allowed", method: ( event.get "method" )}
       else if event.when "failure"
-        # TODO are there other errors we need to worry about?
         error = event.get "failure error"
         yield { name: "failure", error }
     return
@@ -25,7 +23,6 @@ HTTP =
         value = event.get "response json"
         yield { name: "value", value }
       else if event.when "failure"
-        # TODO are there other errors we need to worry about?
         error = event.get "failure error"
         yield { name: "failure", error }
     return
@@ -35,7 +32,6 @@ HTTP =
       if event.when "success"
         yield name: "success"
       else if event.when "failure"
-        # TODO are there other errors we need to worry about?
         error = event.get "failure error"
         yield { name: "failure", error }
     return
@@ -46,15 +42,12 @@ HTTP =
         value = event.get "response json"
         if event.when "created"
           location = event.get "location"
-          # TODO add resource to registry
-          # TODO generate lifecycle event for resource
           yield { name: "created", location, value }
           yield { name: "value", location, value }
         else
           # success?
           yield { name: "value", value }
       else if event.when "failure"
-        # TODO are there other errors we need to worry about?
         error = event.get "failure error"
         yield { name: "failure", error }
     return

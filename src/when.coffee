@@ -49,20 +49,9 @@ When =
   "method not allowed": ( talos, state ) ->
     talos.failure && talos.context.failure == "method not allowed"
 
-  # TODO confirm that this is the right way to detect a network error
   "network error": ( talos ) ->
     talos.failure && talos.error.message == "Failure to fetch"
 
-# TODO develop this idea further
-# When.failFrom = generic name: "vega-client: When.failFrom"
-# generic When.failFrom, Talos.isType, Type.isString,
-#   ( talos, name ) ->
-#     talos.failure && ( When.name talos, name )
-# generic When.failFrom, Talos.isType, Type.isString, Type.isString,
-#   ( talos, name, state ) ->
-#     talos.failure && 
-#       ( When.name talos, name ) && 
-#       ( When.previous talos, state )
   
 export default When
 export { When }

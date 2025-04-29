@@ -4,7 +4,6 @@ import APIDescription from "./api-description"
 import Core from "./vega-core"
 
 
-# TODO: Should this be moved to some sort of generic type dispatching?
 hasResource = ( talos ) ->
   { resource } = talos.context
   ( Type.isObject resource ) && resource.origin? && resource.name?

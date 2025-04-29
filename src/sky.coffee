@@ -28,8 +28,6 @@ Sky =
       talos.context.signatures = signatures
     else
       talos.context.failure = "method not allowed"
-      # TODO use HTTP status codes
-      throw new Error "unsupported method #{ name }"
 
   target: Fn.curry ( bindings, talos ) ->
     if ( t = talos.context.resource?.template )?

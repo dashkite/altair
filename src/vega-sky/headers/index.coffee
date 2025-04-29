@@ -8,7 +8,6 @@ Run =
   setup: ( talos ) ->
     talos.context.headers = {}
 
-  # TODO check signature to determine whether we should have content
   content: ( talos ) ->
     if talos.context.content?
       talos.context.headers[ "content-type" ] = Content.make talos.context
