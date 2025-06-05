@@ -30,7 +30,7 @@ HTTP =
   delete: ( locator ) ->
     for await event from ( Altair.bind Altair.delete locator )
       if event.when "success"
-        yield name: "success"
+        yield { name: "success", method: "delete", locator }
       else if event.when "failure"
         error = event.get "failure error"
         yield { name: "failure", error }
