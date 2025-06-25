@@ -4,7 +4,6 @@ import { MediaType, Accept } from "@dashkite/media-type"
 import { Async } from "@dashkite/talos"
 import Mercury from "./mercury"
 
-
 Sky =
   context: Fn.curry ( context, talos ) ->
     talos.context = context

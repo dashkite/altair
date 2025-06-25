@@ -1,0 +1,6 @@
+pug:
+  targets:
+    browser:
+      - preset: html
+        glob: "{src,test}/**/*.pug"
+
