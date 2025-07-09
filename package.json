@@ -47,6 +47,7 @@
     "@dashkite/genie-drn": "link:../genie-drn",
     "@dashkite/genie-module": "link:../genie-module",
     "@dashkite/genie-pug": "link:../genie-pug",
+    "@dashkite/genie-release": "link:../genie-release",
     "@dashkite/genie-yaml": "link:../genie-yaml",
     "@dashkite/vista": "link:../vista",
     "chalk": "^5.4.1",
