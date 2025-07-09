@@ -88,14 +88,11 @@ importers:
         specifier: link:../genie-pug
         version: link:../genie-pug
       '@dashkite/genie-release':
-        specifier: link:../genie-release
-        version: link:../genie-release
+        specifier: ^0.2.0
+        version: 0.2.0
       '@dashkite/genie-yaml':
         specifier: link:../genie-yaml
         version: link:../genie-yaml
-      '@dashkite/vista':
-        specifier: link:../vista
-        version: link:../vista
       chalk:
         specifier: ^5.4.1
         version: 5.4.1
@@ -134,6 +131,9 @@ packages:
   '@dashkite/events@0.1.0':
     resolution: {integrity: sha512-HM7jXFDtEkUj79S9XkZfLc6JcL+hlLj2eBkKyBzfvyzFLfRTbsjlSHwN+EhZ7f31Jcj9S5KpBZMh4Bj/GYW54A==}
 
+  '@dashkite/genie-release@0.2.0':
+    resolution: {integrity: sha512-ySaAzJw7FfpF+lIomBjQm1s8rcrCDl29h6p0Wyaa6Br/FdIFyDbc8CRJKS8BnxMqN5sEN3J/qE/t7QNk7mZMKw==}
+
   '@dashkite/helium@0.4.4':
     resolution: {integrity: sha512-3e+XLDP87TcUFYVz30wVc4gKYZAcHyZqF32LIGCHi0/z5vnRkMBycMD7DtRTaC8n2guP2S52UsZSfDfvVci5sw==}
 
@@ -148,6 +148,9 @@ packages:
 
   '@dashkite/utf8@1.0.1':
     resolution: {integrity: sha512-58HZrEijYUG9p8SAf4o/NR7U3qUq//9XbkQ7T5cHIY/RFjCVg9vpWZlHXkcbZp7v3CAMJgEGVXt/5/upvOBQAw==}
+
+  '@dashkite/zephyr@0.2.0':
+    resolution: {integrity: sha512-l3Fm9nyOIp1yBnv4IzGOKVgo1/UucU5WLvsqAfcP2jEVlE4AgpPkODssyloxTyC3N+bhcz1DXqC/7KokI1eVjA==}
 
   '@puppeteer/browsers@2.10.5':
     resolution: {integrity: sha512-eifa0o+i8dERnngJwKrfp3dEq7ia5XFyoqB17S4gK8GhsQE4/P8nxOfQSE0zQHxzzLo/cmF+7+ywEQ7wK7Fb+w==}
@@ -790,6 +793,11 @@ packages:
   zod@3.25.53:
     resolution: {integrity: sha512-BKOKoY3XcGUVkqaalCtFK15LhwR0G0i65AClFpWSXLN2gJNBGlTktukHgwexCTa/dAacPPp9ReryXPWyeZF4LQ==}
 
+  zx@8.6.1:
+    resolution: {integrity: sha512-ig4Gn2e3L9QaQq3OsyDyGKvXFiq7wYvLCPmFJgcneHsr5vTeJefe0SXtDE7qaur9ysv7giAc0CmEtQcS71UA5Q==}
+    engines: {node: '>= 12.17.0'}
+    hasBin: true
+
 snapshots:
 
   '@babel/code-frame@7.27.1':
@@ -822,6 +830,11 @@ snapshots:
     dependencies:
       '@ungap/event-target': 0.2.4
 
+  '@dashkite/genie-release@0.2.0':
+    dependencies:
+      '@dashkite/zephyr': 0.2.0
+      zx: 8.6.1
+
   '@dashkite/helium@0.4.4': {}
 
   '@dashkite/joy@0.3.16': {}
@@ -833,6 +846,11 @@ snapshots:
   '@dashkite/tweetnacl@1.0.3': {}
 
   '@dashkite/utf8@1.0.1': {}
+
+  '@dashkite/zephyr@0.2.0':
+    dependencies:
+      '@dashkite/joy': 0.3.16
+      js-yaml: 4.1.0
 
   '@puppeteer/browsers@2.10.5':
     dependencies:
@@ -1543,3 +1561,5 @@ snapshots:
       fd-slicer: 1.1.0
 
   zod@3.25.53: {}
+
+  zx@8.6.1: {}
