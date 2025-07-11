@@ -88,8 +88,8 @@ importers:
         specifier: link:../genie-pug
         version: link:../genie-pug
       '@dashkite/genie-release':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.2.1
+        version: 0.2.1
       '@dashkite/genie-yaml':
         specifier: link:../genie-yaml
         version: link:../genie-yaml
@@ -131,8 +131,8 @@ packages:
   '@dashkite/events@0.1.0':
     resolution: {integrity: sha512-HM7jXFDtEkUj79S9XkZfLc6JcL+hlLj2eBkKyBzfvyzFLfRTbsjlSHwN+EhZ7f31Jcj9S5KpBZMh4Bj/GYW54A==}
 
-  '@dashkite/genie-release@0.2.0':
-    resolution: {integrity: sha512-ySaAzJw7FfpF+lIomBjQm1s8rcrCDl29h6p0Wyaa6Br/FdIFyDbc8CRJKS8BnxMqN5sEN3J/qE/t7QNk7mZMKw==}
+  '@dashkite/genie-release@0.2.1':
+    resolution: {integrity: sha512-j4U8WyInBX82JunZPWy6kAFrrY9pd7GnsJbJpEuh/6w8HnHniEa5gRVDALOo9OD+eRclFYcrNFzXiHu54MZs8g==}
 
   '@dashkite/helium@0.4.4':
     resolution: {integrity: sha512-3e+XLDP87TcUFYVz30wVc4gKYZAcHyZqF32LIGCHi0/z5vnRkMBycMD7DtRTaC8n2guP2S52UsZSfDfvVci5sw==}
@@ -830,7 +830,7 @@ snapshots:
     dependencies:
       '@ungap/event-target': 0.2.4
 
-  '@dashkite/genie-release@0.2.0':
+  '@dashkite/genie-release@0.2.1':
     dependencies:
       '@dashkite/zephyr': 0.2.0
       zx: 8.6.1
