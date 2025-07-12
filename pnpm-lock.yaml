@@ -70,8 +70,8 @@ importers:
         specifier: link:../drn-sky
         version: link:../drn-sky
       '@dashkite/genie':
-        specifier: link:../genie
-        version: link:../genie
+        specifier: 0.9.0
+        version: 0.9.0
       '@dashkite/genie-clean':
         specifier: 0.2.0
         version: 0.2.0
@@ -679,11 +679,19 @@ packages:
   '@dashkite/genie-release@0.2.3':
     resolution: {integrity: sha512-uZOoG31RXa19nT4dxPw4Vrmy+HGP7PYzzpTL1qlq9LhTNsTXInzp9lWUMZq/4KBiQqexFjPNVuB7+GApmuAhvA==}
 
+  '@dashkite/genie@0.9.0':
+    resolution: {integrity: sha512-QPgrIZqg4X4/QAvyinASjPu0Shofvxl5UHk0aT9A+FLgl5GyjQ5KefA4nUJJry3GdsBfK6fh1XHpnmpRF9/ERQ==}
+    engines: {node: '>=20.0.0'}
+    hasBin: true
+
   '@dashkite/helium@0.4.4':
     resolution: {integrity: sha512-3e+XLDP87TcUFYVz30wVc4gKYZAcHyZqF32LIGCHi0/z5vnRkMBycMD7DtRTaC8n2guP2S52UsZSfDfvVci5sw==}
 
   '@dashkite/joy@0.3.16':
     resolution: {integrity: sha512-dsU0us4j1Pb+zceoBvLbnZ2PbmULkJUtM2vtWLxKmoc1DE4w9SVTiPTe6JWvF0A0vk90ldv+Lc9qEA5x3O+DtQ==}
+
+  '@dashkite/kaiko@0.3.3':
+    resolution: {integrity: sha512-XnAvVr9y2MsDqMLr4A24vkLF7Iuq3E8RjHEEpqhe29P5NevVX9jXKcXUStNMp9MSJbjHd2pqUNiM5Vvdja9ggg==}
 
   '@dashkite/katana@0.4.8':
     resolution: {integrity: sha512-KOfMS5aRZItxPeMv0OXbOTCj5BZhN9jM190jae8HB7WgGB5uM5jEzRWmyh3yVbxTaL83o7csktRzUkxkr/Op1A==}
@@ -975,6 +983,9 @@ packages:
   buffer-crc32@0.2.13:
     resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
 
+  buffer-from@1.1.2:
+    resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
+
   bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
@@ -1027,6 +1038,10 @@ packages:
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
 
+  commander@11.1.0:
+    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
+    engines: {node: '>=16'}
+
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
@@ -1068,6 +1083,9 @@ packages:
   data-uri-to-buffer@6.0.2:
     resolution: {integrity: sha512-7hvf7/GW8e86rW0ptuwS3OcBGDjIi6SZva7hCyWC0yYry2cOPmLIjXAUHI6DK2HsnwJd9ifmt57i8eV2n4YNpw==}
     engines: {node: '>= 14'}
+
+  dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
@@ -1796,6 +1814,9 @@ packages:
   socks@2.8.4:
     resolution: {integrity: sha512-D3YaD0aRxR3mEcqnidIs7ReYJFVzWdd6fXJYUM8ixcQcJRGTka/b3saV0KflYhyVJXKhb947GndU35SxYNResQ==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+
+  source-map-support@0.5.21:
+    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
 
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
@@ -2736,9 +2757,26 @@ snapshots:
       '@dashkite/zephyr': 0.2.0
       zx: 8.6.1
 
+  '@dashkite/genie@0.9.0':
+    dependencies:
+      '@dashkite/joy': 0.3.16
+      '@dashkite/kaiko': 0.3.3
+      '@swc/core': 1.12.11
+      chalk: 4.1.2
+      coffeescript: 2.7.0
+      commander: 11.1.0
+      dayjs: 1.11.13
+      fast-glob: 3.3.3
+      js-yaml: 4.1.0
+      source-map-support: 0.5.21
+    transitivePeerDependencies:
+      - '@swc/helpers'
+
   '@dashkite/helium@0.4.4': {}
 
   '@dashkite/joy@0.3.16': {}
+
+  '@dashkite/kaiko@0.3.3': {}
 
   '@dashkite/katana@0.4.8':
     dependencies:
@@ -3044,6 +3082,8 @@ snapshots:
 
   buffer-crc32@0.2.13: {}
 
+  buffer-from@1.1.2: {}
+
   bytes@3.1.2: {}
 
   call-bind-apply-helpers@1.0.2:
@@ -3099,6 +3139,8 @@ snapshots:
 
   color-name@1.1.4: {}
 
+  commander@11.1.0: {}
+
   concat-map@0.0.1: {}
 
   content-disposition@1.0.0:
@@ -3131,6 +3173,8 @@ snapshots:
       which: 2.0.2
 
   data-uri-to-buffer@6.0.2: {}
+
+  dayjs@1.11.13: {}
 
   debug@4.4.1:
     dependencies:
@@ -3931,8 +3975,12 @@ snapshots:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
 
-  source-map@0.6.1:
-    optional: true
+  source-map-support@0.5.21:
+    dependencies:
+      buffer-from: 1.1.2
+      source-map: 0.6.1
+
+  source-map@0.6.1: {}
 
   sprintf-js@1.1.3: {}
 
