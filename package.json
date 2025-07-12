@@ -48,7 +48,7 @@
     "@dashkite/genie-drn": "link:../genie-drn",
     "@dashkite/genie-module": "link:../genie-module",
     "@dashkite/genie-pug": "link:../genie-pug",
-    "@dashkite/genie-release": "^0.2.5",
+    "@dashkite/genie-release": "^0.2.6",
     "@dashkite/genie-yaml": "link:../genie-yaml",
     "chalk": "^5.4.1",
     "express": "^5.1.0",
