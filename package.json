@@ -46,7 +46,6 @@
     "@dashkite/genie-clean": "0.2.0",
     "@dashkite/genie-coffee": "0.2.0",
     "@dashkite/genie-drn": "link:../genie-drn",
-    "@dashkite/genie-module": "link:../genie-module",
     "@dashkite/genie-pug": "link:../genie-pug",
     "@dashkite/genie-release": "^0.2.8",
     "@dashkite/genie-yaml": "link:../genie-yaml",
