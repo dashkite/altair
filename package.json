@@ -47,7 +47,7 @@
     "@dashkite/genie-coffee": "0.2.0",
     "@dashkite/genie-drn": "link:../genie-drn",
     "@dashkite/genie-pug": "link:../genie-pug",
-    "@dashkite/genie-release": "^0.2.9",
+    "@dashkite/genie-release": "^0.2.10",
     "@dashkite/genie-yaml": "link:../genie-yaml",
     "chalk": "^5.4.1",
     "express": "^5.1.0",
