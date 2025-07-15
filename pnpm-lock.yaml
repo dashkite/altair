@@ -82,8 +82,8 @@ importers:
         specifier: link:../genie-drn
         version: link:../genie-drn
       '@dashkite/genie-pug':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.1
+        version: 0.4.1
       '@dashkite/genie-release':
         specifier: ^0.2.10
         version: 0.2.10
@@ -676,8 +676,8 @@ packages:
   '@dashkite/genie-coffee@0.9.0':
     resolution: {integrity: sha512-8Ukg3m/nQnxbmrww313lzYJJQRAxhRgbPpbqCWj7ovzS8LejoA1OGbbjRd8Ew7SdzZrJ6WYY7d08VxIbim72mw==}
 
-  '@dashkite/genie-pug@0.4.0':
-    resolution: {integrity: sha512-gywFmyQA4qImWyDNFd5FIoB0KprjaAUGoyZUAMIs/mY+0MseUZ9401Zlx6WmVaGXx6BjF1F/DL+rpGFKa37xBw==}
+  '@dashkite/genie-pug@0.4.1':
+    resolution: {integrity: sha512-X2T8OebU4amkGT7pAXPML//Ul0CHQOxUJFJi/rfYZY4s51vLpdbS9zkBelwE+UqoOtiUrsYzRlp7foskhXGZyg==}
 
   '@dashkite/genie-release@0.2.10':
     resolution: {integrity: sha512-8pczG/SY+Nbstl+cIc9s0+tsNewNTyNfi60g7RHvpzxe6Qd2/WUCIfmFqcF39CAUVlAq94+6M29vhDOwPlLk/Q==}
@@ -693,11 +693,11 @@ packages:
   '@dashkite/joy@0.3.16':
     resolution: {integrity: sha512-dsU0us4j1Pb+zceoBvLbnZ2PbmULkJUtM2vtWLxKmoc1DE4w9SVTiPTe6JWvF0A0vk90ldv+Lc9qEA5x3O+DtQ==}
 
-  '@dashkite/joy@0.5.0':
-    resolution: {integrity: sha512-kaDNKKS6v5r3vukOkh54aarrhiTHwbcKZZW8eDav5FhT6u8RRrmSaFeAbwLzGntdPScaEhqg/PLrvtPHOy9OlQ==}
-
   '@dashkite/joy@0.6.0':
     resolution: {integrity: sha512-6lFhlzHQ3SWqD1o8RcT6prWmiU5KHhdmG/t8AaGChRfYCYOahDmmLtaglMmpNJVWnve8nFL7BBC03+hnTl9HUw==}
+
+  '@dashkite/joy@0.7.0':
+    resolution: {integrity: sha512-1sldJtFRJJwwm1yb2vrhUNvs9ns30ROS5E7KwBTkJ+yPVNsbgIFbakYn7AQSaEsLs/ZdqbHW7dWx+Wo/uG4D7w==}
 
   '@dashkite/kaiko@0.3.3':
     resolution: {integrity: sha512-XnAvVr9y2MsDqMLr4A24vkLF7Iuq3E8RjHEEpqhe29P5NevVX9jXKcXUStNMp9MSJbjHd2pqUNiM5Vvdja9ggg==}
@@ -705,41 +705,50 @@ packages:
   '@dashkite/katana@0.4.8':
     resolution: {integrity: sha512-KOfMS5aRZItxPeMv0OXbOTCj5BZhN9jM190jae8HB7WgGB5uM5jEzRWmyh3yVbxTaL83o7csktRzUkxkr/Op1A==}
 
+  '@dashkite/masonry-coffee@0.10.0':
+    resolution: {integrity: sha512-8GRbTL7icWWg6SNrXiyIdXYf/3TXVRUoYSpNEy9O3EZvXC3xFNjxX4epsuL3HegNYJCKG03SvswZGxmfYuR/fQ==}
+
   '@dashkite/masonry-coffee@0.2.0':
     resolution: {integrity: sha512-xJO48SIRpsYbJF32CwpA6yeEJhNh+DtxCucyt4MNJqO0yru9X7hoxZsHneRoUE+kISD0KTO8DLQiHv21nU/V2A==}
-
-  '@dashkite/masonry-coffee@0.3.0':
-    resolution: {integrity: sha512-+LzBNiTCTYeY1wmlRCkDue8fq1uqiuyHh4kXdjEQ60QRZFqxk+32OQWXx7M4xmxgajRKVRgpoBZ2KOxxPfDEvA==}
 
   '@dashkite/masonry-export@0.1.0':
     resolution: {integrity: sha512-K5ILSl4b+8SatTJTO4AJO+QuBR+coXk9gkeAZRtIx7qhuhdJbB1dCq+pqscYGJ81He1lzHP4DiQtEAf8wBHykA==}
 
-  '@dashkite/masonry-hooks@0.1.0':
-    resolution: {integrity: sha512-DeRzJH5TDMMK2glUwvNjCqzsKlTrBnJ4pZfYbSIbDvstBDy/6QpHlmEHsg1LL50Olx4fEtuwpjUQ69CT6EgNoQ==}
+  '@dashkite/masonry-export@0.7.0':
+    resolution: {integrity: sha512-1Ll6nOYRKU2ylp9GH4UOG06g4otHxUW6q9xeIKxzwyrYXnHgWBRfS8Q18mDwWeT0Bcp1Qu9V/cDN1OsN9F0+/Q==}
 
-  '@dashkite/masonry-markdown@0.1.0':
-    resolution: {integrity: sha512-n5YDh8nyxvPssJHJelEDfPnimIOvrtOwbzAeLvyuHGTAmtjXrD7DbSZymmxVJ2fkbqO84Xz3ipbbi5VVRU//GQ==}
+  '@dashkite/masonry-hooks@0.8.0':
+    resolution: {integrity: sha512-GqZt5YlYURo4j1v7qNjP0QxZ+Qb3pts/G2aPgVtL3ZHGwEYtj2fCf58nNUwmygdK89n3LiEY6RvR0uvmmKXMPA==}
 
-  '@dashkite/masonry-pug@0.3.0':
-    resolution: {integrity: sha512-i0M/6qkjvPTMXz8AWGflz6Edu148p9tYID9K+caYe+fsNw9ooK7ydvhL3e50TRRFw5c7FNhyDuFHjyKSgWxLOg==}
+  '@dashkite/masonry-markdown@0.7.0':
+    resolution: {integrity: sha512-syY8pwAkh/4VsENnZ7eRn6g0oENgLaEcKTp9egja1YjlnlMd0ZtdbPHXBFsQ7dk9aqyNPzxC2UtAjo3nEYYmZQ==}
 
-  '@dashkite/masonry-stylus@0.1.0':
-    resolution: {integrity: sha512-tehLvG9Igsvyegi7CkZQK3wcRIwMsMwzDriV+1ina43ZlUthdrG9j+/EovtRzkafw5/janYVYiaT/XHFYKY7mQ==}
+  '@dashkite/masonry-pug@0.6.1':
+    resolution: {integrity: sha512-H93iXBeFS+kU4NarWdzVB3HeIlKrOwtWk8AcW2/h9pH0aEetHvzL4SIiwMJR4ZnT9OJSJI0Iq38z/TyWw8DBtw==}
+
+  '@dashkite/masonry-stylus@0.8.0':
+    resolution: {integrity: sha512-lZ8AAHhSezJe3wf0kVoVlFAuWSIiOuMdPf+HJ1fxCXJL8REJ88rcN6zLxLU9OkwBgiyfaCcdiha6+XhtdRhPig==}
 
   '@dashkite/masonry-targets@0.1.0':
     resolution: {integrity: sha512-nb1N+oBZLw04AFUV49ZFLBAb/NQ0fJseO6ACrEfgXkHra2I1oxwHxLIKtMqWcedQa3QP2pqA/eeBmtGiTQGM0Q==}
 
-  '@dashkite/masonry-targets@0.2.0':
-    resolution: {integrity: sha512-+5VoeUdSqHUMNyxH7ippTq6VLEGiDd7yOh/4FiTmszetBZhMZUA2Pw7mvt7c8pF1dOQKahcFdqJw89IcVLiGxQ==}
+  '@dashkite/masonry-targets@0.9.0':
+    resolution: {integrity: sha512-nIjZXgJpj0JMeErNhOfuqe2QVrYNFv+8ErF5rmmnGn9MJDvb9zkG1NdLxPt7uPRx/houtV7lrHEhSuS8AzBwDQ==}
 
-  '@dashkite/masonry-yaml@0.1.0':
-    resolution: {integrity: sha512-BQkz+DfHmw5niDvPcJ9xcDfUqfUVUCL2Pvk3mhqt91IW8rV2mXLy58o7piWf/Zc7BvhEjTKR59LbacdDLraZcA==}
+  '@dashkite/masonry-text@0.7.0':
+    resolution: {integrity: sha512-5nxGc+caqu5L8oT8YtbmmMqh8PMFlJVLthhohR4QmNI2HwZ+XHjtyi33P9TKyxAkLBHPFcoVfui0M42p2kaseA==}
+
+  '@dashkite/masonry-yaml@0.8.0':
+    resolution: {integrity: sha512-kvLSQa339SG7yueaas34ckNsSq6rbteKKK9tusT0JlmvqTkoPPOkAsMmpVvtIXKdEdoF680lEeIc5fBlsH3nPA==}
 
   '@dashkite/masonry@0.13.0':
     resolution: {integrity: sha512-qGP0Ortn8tzBTY9BRv965V5IIhJCmsNMTjLq0X7Pk80lBgNROc+tV/5BXjziBZ9CG7fcJ5h3ZvCsl1f6byfsFQ==}
 
   '@dashkite/masonry@0.14.0':
     resolution: {integrity: sha512-5POHf/fpqgFba4Xbrr8oNHIpkKTD1WgFTZMjBZBvluv8YBWzLayAd9l4R0TYy+MybBVFFJ2Tj7v5DlIu6dPgvw==}
+
+  '@dashkite/masonry@0.21.0':
+    resolution: {integrity: sha512-3S9WLN+TuP1aUjNbcjshe0LV9otoHFujNs08Ysdt4tzNxpjdvc3AuynP9c188qB2+RtPjp1q8AkUNwUN2JaFDA==}
 
   '@dashkite/tweetnacl@1.0.3':
     resolution: {integrity: sha512-qBw5yhOw8mCe7fV6sw/5DIfQLW3txB+MlSDngf7h2WwnRz5CWzmhVBnKuYHcMXX9u50T4iW0AR/FwEl6Tm/TMQ==}
@@ -2907,12 +2916,12 @@ snapshots:
       - '@swc/helpers'
       - supports-color
 
-  '@dashkite/genie-pug@0.4.0':
+  '@dashkite/genie-pug@0.4.1':
     dependencies:
-      '@dashkite/masonry': 0.14.0
-      '@dashkite/masonry-hooks': 0.1.0
-      '@dashkite/masonry-pug': 0.3.0
-      '@dashkite/masonry-targets': 0.2.0
+      '@dashkite/masonry': 0.21.0
+      '@dashkite/masonry-hooks': 0.8.0
+      '@dashkite/masonry-pug': 0.6.1
+      '@dashkite/masonry-targets': 0.9.0
     transitivePeerDependencies:
       - '@swc/helpers'
       - supports-color
@@ -2944,15 +2953,22 @@ snapshots:
 
   '@dashkite/joy@0.3.16': {}
 
-  '@dashkite/joy@0.5.0': {}
-
   '@dashkite/joy@0.6.0': {}
+
+  '@dashkite/joy@0.7.0': {}
 
   '@dashkite/kaiko@0.3.3': {}
 
   '@dashkite/katana@0.4.8':
     dependencies:
       '@dashkite/joy': 0.3.16
+
+  '@dashkite/masonry-coffee@0.10.0':
+    dependencies:
+      '@swc/core': 1.12.14
+      coffeescript: 2.7.0
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@dashkite/masonry-coffee@0.2.0':
     dependencies:
@@ -2961,41 +2977,37 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@dashkite/masonry-coffee@0.3.0':
-    dependencies:
-      '@swc/core': 1.12.14
-      coffeescript: 2.7.0
-    transitivePeerDependencies:
-      - '@swc/helpers'
-
   '@dashkite/masonry-export@0.1.0': {}
 
-  '@dashkite/masonry-hooks@0.1.0':
+  '@dashkite/masonry-export@0.7.0': {}
+
+  '@dashkite/masonry-hooks@0.8.0':
     dependencies:
       '@dashkite/masonry': 0.14.0
     transitivePeerDependencies:
       - supports-color
 
-  '@dashkite/masonry-markdown@0.1.0':
+  '@dashkite/masonry-markdown@0.7.0':
     dependencies:
       marked: 8.0.1
 
-  '@dashkite/masonry-pug@0.3.0':
+  '@dashkite/masonry-pug@0.6.1':
     dependencies:
-      '@dashkite/joy': 0.5.0
-      '@dashkite/masonry-coffee': 0.3.0
-      '@dashkite/masonry-export': 0.1.0
-      '@dashkite/masonry-markdown': 0.1.0
-      '@dashkite/masonry-stylus': 0.1.0
-      '@dashkite/masonry-yaml': 0.1.0
+      '@dashkite/joy': 0.7.0
+      '@dashkite/masonry-coffee': 0.10.0
+      '@dashkite/masonry-export': 0.7.0
+      '@dashkite/masonry-markdown': 0.7.0
+      '@dashkite/masonry-stylus': 0.8.0
+      '@dashkite/masonry-yaml': 0.8.0
       marked: 9.1.6
       pug: 3.0.3
     transitivePeerDependencies:
       - '@swc/helpers'
       - supports-color
 
-  '@dashkite/masonry-stylus@0.1.0':
+  '@dashkite/masonry-stylus@0.8.0':
     dependencies:
+      '@dashkite/masonry-text': 0.7.0
       stylus: 0.60.0
     transitivePeerDependencies:
       - supports-color
@@ -3005,12 +3017,16 @@ snapshots:
       '@dashkite/joy': 0.3.16
       fast-glob: 3.3.3
 
-  '@dashkite/masonry-targets@0.2.0':
+  '@dashkite/masonry-targets@0.9.0':
     dependencies:
       '@dashkite/joy': 0.3.16
       fast-glob: 3.3.3
 
-  '@dashkite/masonry-yaml@0.1.0':
+  '@dashkite/masonry-text@0.7.0':
+    dependencies:
+      '@dashkite/masonry-export': 0.1.0
+
+  '@dashkite/masonry-yaml@0.8.0':
     dependencies:
       js-yaml: 4.1.0
 
@@ -3026,6 +3042,17 @@ snapshots:
       - supports-color
 
   '@dashkite/masonry@0.14.0':
+    dependencies:
+      '@babel/core': 7.22.15
+      '@babel/preset-env': 7.22.15(@babel/core@7.22.15)
+      '@dashkite/joy': 0.3.16
+      chalk: 4.1.2
+      chokidar: 3.6.0
+      fast-glob: 3.3.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@dashkite/masonry@0.21.0':
     dependencies:
       '@babel/core': 7.22.15
       '@babel/preset-env': 7.22.15(@babel/core@7.22.15)
