@@ -56,18 +56,18 @@
   "dependencies": {
     "@dashkite/bake": "^0.0.6",
     "@dashkite/events": "^0.1.0",
-    "@dashkite/generic": "link:../generic",
+    "@dashkite/generic": "0.6.0",
     "@dashkite/helium": "^0.8.0",
-    "@dashkite/http-headers": "link:../http-headers",
-    "@dashkite/joy": "link:../joy",
+    "@dashkite/http-headers": "0.9.0",
+    "@dashkite/joy": "0.8.0",
     "@dashkite/katana": "^0.4.8",
-    "@dashkite/media-type": "link:../media-type",
-    "@dashkite/profile": "link:../profile",
+    "@dashkite/media-type": "0.5.0",
+    "@dashkite/profile": "0.6.0",
     "@dashkite/runes-client": "link:../runes-client",
-    "@dashkite/scout": "link:../scout",
+    "@dashkite/scout": "0.5.0",
     "@dashkite/sierra": "link:../sierra",
-    "@dashkite/talos": "link:../talos",
-    "@dashkite/url-codex": "link:../url-codex",
+    "@dashkite/talos": "0.4.0",
+    "@dashkite/url-codex": "0.6.0",
     "panda-confidential": "^3.1.2"
   }
 }
