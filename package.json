@@ -63,7 +63,7 @@
     "@dashkite/katana": "^0.4.8",
     "@dashkite/media-type": "0.5.0",
     "@dashkite/profile": "0.6.0",
-    "@dashkite/runes-client": "link:../runes-client",
+    "@dashkite/runes-client": "0.3.0",
     "@dashkite/scout": "0.5.0",
     "@dashkite/sierra": "link:../sierra",
     "@dashkite/talos": "0.4.0",
