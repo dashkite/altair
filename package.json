@@ -65,7 +65,7 @@
     "@dashkite/profile": "0.6.0",
     "@dashkite/runes-client": "0.3.0",
     "@dashkite/scout": "0.5.0",
-    "@dashkite/sierra": "link:../sierra",
+    "@dashkite/sierra": "0.1.0",
     "@dashkite/talos": "0.4.0",
     "@dashkite/url-codex": "0.6.0",
     "panda-confidential": "^3.1.2"
