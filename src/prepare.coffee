@@ -1,8 +1,8 @@
-import * as Scout from "@dashkite/scout"
+import { Request } from "@dashkite/sky-sublime"
 
-prepare = ( context ) ->
-  yield name: "prepare"
-  context.api = await Scout.discover context.url
+prepare = ( specifier ) ->
+  context = request: Request.make specifier
+  yield { name: "prepare", context }
   context
 
 export default prepare

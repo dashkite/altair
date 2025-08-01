@@ -5,13 +5,11 @@ import finalize from "./finalize"
 
 attempt = ( context ) ->
   yield name: "attempt"
+  context = yield from prepare context
   context = yield from cached context
-  if context.response?
-    context
-  else
-    context = yield from prepare context
+  if !context.response?
     context = await yield from request context
     context = yield from finalize context
-    context
+  context
 
 export default attempt

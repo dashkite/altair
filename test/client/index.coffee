@@ -6,27 +6,20 @@ import HTTP from "../../src/index.js"
 
 window.__test = ->
 
-  window.fetch = ( context ) ->
-    switch context
-      when "https://acme.org/", "https://acme.org"
-        new Response ( json api ),
-          status: 200
-          "content-type": "application/json"
-      else
-        new Response "hello Dan", 
-          status: 200
-          "content-type": "text/plain"
-
-  window.json = ( value ) ->
-    JSON.stringify value, null, 2
-
   test "Altair", [
+
     test "greeting", ->
-      for await event from ( HTTP.get 
-                              origin: "https://acme.org", 
-                              target: "/test" )
+
+      reactor = HTTP.get 
+        origin: "https://httpbin.org", 
+        target: "/status/200"
+
+      for await event from reactor
         console.log event.name
         if event.response?
           response = event.response
-      assert.equal "hello Dan",
-        await response.text()  ]
+
+      assert.equal 200,
+        response.status
+
+  ]

@@ -2,41 +2,24 @@ import * as Obj from "@dashkite/joy/object"
 import Generic from "@dashkite/generic"
 import prepare from "./prepare"
 import attempt from "./attempt"
+import done from "./done"
 import finalize from "./finalize"
-import viable from "./viable"
-
-normalize = do ->
-
-  Generic.make "_normalize"
-
-    .define [ Obj.has "url" ], ({ url }) -> { url}
-
-    .define [ Obj.has "origin" ], ({ origin, target }) ->
-      url: new URL ( if target? then "#{ origin }#{ target }" else origin )
-
-    .define [ URL ], ( url ) -> { url }
-
-    .define [ String ], ( url ) -> url: new URL text
 
 HTTP =
 
-  get: ( context ) -> 
-    HTTP.request { method: "get", ( normalize context )... }
+  get: ( specifier ) -> HTTP.request { method: "get", specifier... }
 
-  put: ( context ) -> 
-    HTTP.request { method: "put", ( normalize context )... }
+  put: ( specifier ) -> HTTP.request { method: "put", specifier... }
 
-  delete: ( context ) -> 
-    HTTP.request { method: "delete", ( normalize context )... }
+  delete: ( specifier ) -> HTTP.request { method: "delete", specifier... }
 
-  post: ( context ) -> 
-    HTTP.request { method: "post", ( normalize context )... }
+  post: ( specifier ) -> HTTP.request { method: "post", specifier... }
 
-  request: ( context ) ->
-    context = yield from prepare context
-    while viable context
+  request: ( specifier ) ->
+    context = yield from prepare specifier
+    while !( done context )
       context = await yield from attempt context
     yield from finalize context
-    yield { name: "response", context }
+    context.response
 
 export default HTTP

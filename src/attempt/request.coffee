@@ -1,7 +1,9 @@
+import { convert } from "@dashkite/sublime"
+
 request = ( context ) ->
   yield name: "request"
-  { url, method, headers, cors } = context
-  context.response = await fetch { url, method, headers, cors }
+  context.response = convert to: "sublime",
+    await fetch convert to: "fetch", request
   yield name: "response", response: context.response
   context
 
