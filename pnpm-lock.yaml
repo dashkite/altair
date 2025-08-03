@@ -15,40 +15,40 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
       '@dashkite/generic':
-        specifier: 0.6.0
+        specifier: ^0.6.0
         version: 0.6.0
       '@dashkite/helium':
         specifier: ^0.8.0
         version: 0.8.0
       '@dashkite/http-headers':
-        specifier: 0.9.0
+        specifier: ^0.9.0
         version: 0.9.0
       '@dashkite/joy':
-        specifier: 0.8.0
+        specifier: ^0.8.0
         version: 0.8.0
       '@dashkite/katana':
         specifier: ^0.4.8
         version: 0.4.8
       '@dashkite/media-type':
-        specifier: 0.5.0
+        specifier: ^0.5.0
         version: 0.5.0
       '@dashkite/profile':
-        specifier: 0.6.0
+        specifier: ^0.6.0
         version: 0.6.0
       '@dashkite/runes-client':
-        specifier: 0.3.0
+        specifier: ^0.3.0
         version: 0.3.0
       '@dashkite/scout':
-        specifier: 0.5.0
+        specifier: ^0.5.0
         version: 0.5.0
       '@dashkite/sierra':
-        specifier: 0.1.0
+        specifier: ^0.1.0
         version: 0.1.0
       '@dashkite/talos':
-        specifier: 0.4.0
+        specifier: ^0.4.0
         version: 0.4.0
       '@dashkite/url-codex':
-        specifier: 0.6.0
+        specifier: ^0.6.0
         version: 0.6.0
       panda-confidential:
         specifier: ^3.1.2
@@ -64,22 +64,22 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0
       '@dashkite/atlas':
-        specifier: 0.9.0
+        specifier: ^0.9.0
         version: 0.9.0(@aws-sdk/credential-provider-node@3.529.0)
       '@dashkite/drn-sky':
-        specifier: 0.8.2
+        specifier: ^0.8.2
         version: 0.8.2(@aws-sdk/credential-provider-node@3.529.0)
       '@dashkite/genie':
-        specifier: 0.20.4
+        specifier: ^0.20.4
         version: 0.20.4
       '@dashkite/genie-clean':
-        specifier: 0.9.0
+        specifier: ^0.9.0
         version: 0.9.0
       '@dashkite/genie-coffee':
-        specifier: 0.9.0
+        specifier: ^0.9.0
         version: 0.9.0
       '@dashkite/genie-drn':
-        specifier: 0.12.3
+        specifier: ^0.12.3
         version: 0.12.3
       '@dashkite/genie-pug':
         specifier: ^0.4.1
@@ -88,13 +88,13 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0
       '@dashkite/genie-yaml':
-        specifier: 0.8.0
+        specifier: ^0.8.0
         version: 0.8.0
       chalk:
-        specifier: 5.4.1
-        version: 5.4.1
+        specifier: ^4.1.2
+        version: 4.1.2
       express:
-        specifier: 5.1.0
+        specifier: ^5.1.0
         version: 5.1.0
       puppeteer:
         specifier: ^24.10.0
@@ -1921,10 +1921,6 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
-
-  chalk@5.4.1:
-    resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
   character-parser@2.2.0:
     resolution: {integrity: sha512-+UqJQjFEFaTAs3bNsF2j2kEN1baG/zghZbdqoYEDxGZtJo9LBzl1A+m0D4n3qKx8N2FNv8/Xp6yV9mQmBuptaw==}
@@ -6306,8 +6302,6 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-
-  chalk@5.4.1: {}
 
   character-parser@2.2.0:
     dependencies:
