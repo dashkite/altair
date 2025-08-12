@@ -1,8 +1,8 @@
 import assert from "@dashkite/assert"
-import {test, success} from "@dashkite/amen"
+import { test, success } from "@dashkite/amen"
 import api from "./api"
 
-import HTTP from "../../src/index.js"
+import HTTP from "../../src"
 
 window.__test = ->
 

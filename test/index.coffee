@@ -1,3 +1,5 @@
+import FS from "node:fs"
+import Path from "node:path"
 import assert from "@dashkite/assert"
 import {test, success} from "@dashkite/amen"
 import print from "@dashkite/amen-console"
@@ -9,8 +11,11 @@ import SkyPreset from "@dashkite/atlas/presets/sky"
 
 import configuration from "./configuration"
 
-import Path from "node:path"
-
+log = do ( _log = []) -> 
+  process.on "exit", ->
+    FS.writeFileSync "log.json", JSON.stringify _log
+  ( type, args ) -> _log.push { type, args }
+  
 # configure the import map generator preset
 SkyPreset.apply
   provider: "jsdelivr"
@@ -27,7 +32,6 @@ do ->
 
   # generate the import map
   map = await Atlas.generate [ 
-    # "./build/browser/src/index.js" 
     "./build/browser/test/client/index.js"
   ]
 
@@ -45,13 +49,27 @@ do ->
   # allow logging to the console
   page.on "console", ( message ) ->
     type = message.type()
-    console[ type ] ( chalk.blue.dim " browser ▷" ), 
-      switch type
-        when "warning" then chalk.amber message.text()
-        when "error" then chalk.red message.text()
-        else chalk.green message.text()
+    text = message.text()
+    if ( text.startsWith "JSHandle" )
+      args = await Promise.all do ->
+        arg.jsonValue() for arg in message.args()
+      console[ type ] ( chalk.blue.dim "browser ▷" )
+      console[ type ] args...
+      log type, args
+    else
+      console[ type ] ( chalk.blue.dim "browser ▷" ), 
+        switch type
+          when "warning" then chalk.amber text
+          when "error" then chalk.red text
+          else chalk.green text
+      log type, [ text ]
 
   console.log ""
+
+  await page.tracing.start
+    categories: [ "devtools.timeline" ]
+    path: "./tracing.json"
+
   # navigate to our shell page
   await page.goto "http://localhost:3000/test/client/temp.html"
 
@@ -74,5 +92,7 @@ do ->
   # print the rest results to the console
   console.log ""
   print results
+
+  await page.tracing.stop()
   
   process.exit if success then 0 else 1

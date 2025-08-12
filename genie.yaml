@@ -4,3 +4,7 @@ pug:
       - preset: html
         glob: "{src,test}/**/*.pug"
 
+media:
+  targets:
+    browser:
+      - glob: "src/favicon.ico"

@@ -8,6 +8,8 @@ prepare = ( context ) ->
     # TODO handle error
     # TODO possibly create error response (ex: sky 405)
     # else re-throw
+    # provisional error "handling"
+    console.error error
   context
 
 export default prepare
