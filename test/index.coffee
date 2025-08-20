@@ -1,4 +1,5 @@
-import FS from "node:fs"
+import { writeFileSync as write } from "node:fs"
+import { mkdir } from "node:fs/promises"
 import Path from "node:path"
 import assert from "@dashkite/assert"
 import {test, success} from "@dashkite/amen"
@@ -13,7 +14,7 @@ import configuration from "./configuration"
 
 log = do ( _log = []) -> 
   process.on "exit", ->
-    FS.writeFileSync "log.json", JSON.stringify _log
+    write "test/logs/console.json", JSON.stringify _log
   ( type, args ) -> _log.push { type, args }
   
 # configure the import map generator preset
@@ -29,6 +30,8 @@ express()
   .listen 3000
 
 do ->
+
+  await mkdir "test/logs", recursive: true
 
   # generate the import map
   map = await Atlas.generate [ 
@@ -68,7 +71,7 @@ do ->
 
   await page.tracing.start
     categories: [ "devtools.timeline" ]
-    path: "./tracing.json"
+    path: "./test/logs/tracing.json"
 
   # navigate to our shell page
   await page.goto "http://localhost:3000/test/client/temp.html"
@@ -87,7 +90,7 @@ do ->
   await page.waitForFunction -> window.__test?
 
   # at last! we can run the tests
-  results = await page.evaluate -> window.__test()
+  results = await page.evaluate -> await window.__test()
 
   # print the rest results to the console
   console.log ""

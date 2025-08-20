@@ -1,3 +1,4 @@
+import { Response } from "@dashkite/sky-sublime"
 import { convert } from "@dashkite/sublime"
 import Cache from "#helpers/cache"
 
@@ -12,6 +13,10 @@ cached = ( context ) ->
 
     when "put"
       # TODO construct anticipated response value from request
+      response = convert "fetch", await do ->
+        Response
+          .make { status: 200, content: request.content }
+          .get()
       Cache.put request, response
 
     when "delete"

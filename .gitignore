@@ -2,5 +2,5 @@ build
 node_modules
 .DS_Store
 .log
-
+test/logs
 pnpm-lock.yaml
