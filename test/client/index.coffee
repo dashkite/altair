@@ -31,7 +31,7 @@ window.__test = ->
             headers:
               accept: "application/json"
 
-          assert.deepEqual ( response.headers.get "content-type" ),
+          assert.deepEqual ( response.headers.get "content-type" ).data,
             type: "application"
             subtype: "json"
 
@@ -45,14 +45,58 @@ window.__test = ->
 
       test "put", [
 
-        test "created", ->
+        test "create", ->
 
           response = await yield from HTTP.put 
             origin: "https://httpbin.org", 
             target: "/status/201"
+            content: "hello, world"
 
           assert.equal 201,
             response.status
+
+        test "update", ->
+
+          response = await yield from HTTP.put 
+            origin: "https://httpbin.org", 
+            target: "/status/200"
+            content: "hello, world"
+
+          assert.equal 200,
+            response.status
+
+      ]
+
+      test "delete", [
+
+        test "ok", ->
+          response = await yield from HTTP.delete 
+            origin: "https://httpbin.org", 
+            target: "/delete"
+
+          assert.equal 200,
+            response.status
+
+          assert.equal "httpbin.org",
+            response.content.headers.Host
+
+      ]
+
+      test "post", [
+
+        test "post", ->
+          response = await yield from HTTP.post 
+            origin: "https://httpbin.org", 
+            target: "/post"
+            content: "hello, world"
+            headers:
+              accept: "application/json"
+
+          assert.equal 200,
+            response.status
+
+          assert.equal "httpbin.org",
+            response.content.headers.Host
 
       ]
 

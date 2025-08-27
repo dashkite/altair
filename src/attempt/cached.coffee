@@ -1,4 +1,4 @@
-import { Response } from "@dashkite/sky-sublime"
+import { Response, Request } from "@dashkite/sky-sublime"
 import { convert } from "@dashkite/sublime"
 import Cache from "#helpers/cache"
 
@@ -7,8 +7,15 @@ cached = ( context ) ->
   yield name: "cached"
 
   # match against fetch API Request instance
-  request = convert to: "fetch", context.request
-
+  request = convert to: "fetch", 
+    await do ->
+      Request
+        .make {
+          context.request.data...
+          method: "get"
+        }
+        .get()
+  
   switch context.request.method
 
     when "put"
