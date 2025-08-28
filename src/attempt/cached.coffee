@@ -13,6 +13,7 @@ cached = ( context ) ->
         .make {
           context.request.data...
           method: "get"
+          content: undefined
         }
         .get()
   
