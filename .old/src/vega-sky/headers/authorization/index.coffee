@@ -55,7 +55,6 @@ Run =
     if current.success
       talos.context.result = current.context.result
 
-
 machine = Machine.make "vega-client: headers-authorization",
   start:
     "use authorization literal": When.hasLiteral
