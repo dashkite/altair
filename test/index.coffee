@@ -6,10 +6,10 @@ import {test, success} from "@dashkite/amen"
 import print from "@dashkite/amen-console"
 import chalk from "chalk"
 import puppeteer from "puppeteer"
-import express from "express"
 import Atlas from "@dashkite/atlas"
 import SkyPreset from "@dashkite/atlas/presets/sky"
 
+import Servers from "./servers"
 import configuration from "./configuration"
 
 log = do ( _log = []) -> 
@@ -23,13 +23,9 @@ SkyPreset.apply
   build: "build/browser"
   origin: configuration.provider
 
-# set up simple local server so we can establish a base URL
-# for resolving relative paths
-express()
-  .use express.static "build/browser", redirect: false
-  .listen 3000
-
 do ->
+
+  await Servers.start()
 
   await mkdir "test/logs", recursive: true
 
@@ -67,8 +63,6 @@ do ->
           else chalk.green text
       log type, [ text ]
 
-  console.log ""
-
   await page.tracing.start
     categories: [ "devtools.timeline" ]
     path: "./test/logs/tracing.json"
@@ -86,6 +80,10 @@ do ->
     path: "build/browser/test/client/index.js"
     type: "module"
 
+  # configure
+  await page.evaluate (( configuration ) -> 
+    window.configuration = configuration ), debug: process.env.debug?
+
   # make sure the tests are ready to run
   await page.waitForFunction -> window.__test?
 
@@ -97,5 +95,5 @@ do ->
   print results
 
   await page.tracing.stop()
-  
+
   process.exit if success then 0 else 1

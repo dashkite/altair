@@ -1,5 +1,6 @@
 import assert from "@dashkite/assert"
 import { test, success } from "@dashkite/amen"
+import EventCoroutine from "@dashkite/reactive/event-coroutine"
 
 import HTTP from "../../src"
 
@@ -99,6 +100,26 @@ window.__test = ->
             response.content.headers.Host
 
       ]
+
+    ]
+
+    test "authorization", [
+
+
+      test "success", ->
+
+        EventCoroutine
+
+          .make HTTP.get
+            origin: "http://localhost:3001", 
+            target: "/unauthorized"
+            headers:
+              accept: "application/json"
+
+          .when "authenticate", -> "foo 123"
+
+          .start()
+
 
     ]
 
