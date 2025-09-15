@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import * as Text from "@dashkite/joy/text"
 
 Servers = 
 
@@ -20,11 +21,41 @@ Servers =
 
       .use cors
         origin: true
-        methods: [ "get", "put", "post", "delete" ]
+        methods: [ "GET", "PUT", "POST", "DELETE" ]
         allowedHeaders: [ "authorization", "content-type" ]
         exposedHeaders: [ "www-authenticate" ]
         # preflightContinue: false
 
+      .use express.text()
+
+      .get "/status/:status", ( request, response ) ->
+        response
+          .status Text.parseNumber request.params.status
+          .send "Status: #{ request.params.status }"
+
+      .put "/status/:status", ( request, response ) ->
+        response
+          .status Text.parseNumber request.params.status
+          .send request.body
+
+      .get "/json", ( request, response ) ->
+        response
+          .status 200
+          .json
+            greeting:
+              content: "Hello, world"
+              from: "Yours Truly"
+
+      .post "/post", ( request, response ) ->
+        response
+          .status 200
+          .send "OK"
+      
+      .delete "/delete", ( request, response ) ->
+        response
+          .status 200
+          .send "OK"
+      
       .get "/unauthorized", ( request, response ) ->
 
         console.log 

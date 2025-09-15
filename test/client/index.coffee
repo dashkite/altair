@@ -4,7 +4,7 @@ import EventCoroutine from "@dashkite/reactive/event-coroutine"
 
 import HTTP from "../../src"
 
-import api from "./api"
+import "./authorizers"
 
 window.__test = ->
 
@@ -18,7 +18,7 @@ window.__test = ->
         test "ok", ->
 
           response = await yield from HTTP.get 
-            origin: "https://httpbin.org", 
+            origin: "http://localhost:3001", 
             target: "/status/200"
 
           assert.equal 200,
@@ -27,17 +27,16 @@ window.__test = ->
         test "JSON", ->
 
           response = await yield from HTTP.get 
-            origin: "https://httpbin.org", 
+            origin: "http://localhost:3001", 
             target: "/json"
             headers:
               accept: "application/json"
 
-          assert.deepEqual ( response.headers.get "content-type" ).data,
-            type: "application"
-            subtype: "json"
+          assert.equal "json", 
+            ( response.headers.get "content-type" ).subtype
 
           assert.equal "Yours Truly",
-            response.content.slideshow?.author
+            response.content.greeting?.from
 
           assert.equal 200,
             response.status
@@ -49,7 +48,7 @@ window.__test = ->
         test "create", ->
 
           response = await yield from HTTP.put 
-            origin: "https://httpbin.org", 
+            origin: "http://localhost:3001", 
             target: "/status/201"
             content: "hello, world"
 
@@ -59,7 +58,7 @@ window.__test = ->
         test "update", ->
 
           response = await yield from HTTP.put 
-            origin: "https://httpbin.org", 
+            origin: "http://localhost:3001", 
             target: "/status/200"
             content: "hello, world"
 
@@ -72,14 +71,11 @@ window.__test = ->
 
         test "ok", ->
           response = await yield from HTTP.delete 
-            origin: "https://httpbin.org", 
+            origin: "http://localhost:3001", 
             target: "/delete"
 
           assert.equal 200,
             response.status
-
-          assert.equal "httpbin.org",
-            response.content.headers.Host
 
       ]
 
@@ -87,7 +83,7 @@ window.__test = ->
 
         test "post", ->
           response = await yield from HTTP.post 
-            origin: "https://httpbin.org", 
+            origin: "http://localhost:3001", 
             target: "/post"
             content: "hello, world"
             headers:
@@ -95,9 +91,6 @@ window.__test = ->
 
           assert.equal 200,
             response.status
-
-          assert.equal "httpbin.org",
-            response.content.headers.Host
 
       ]
 
@@ -116,7 +109,8 @@ window.__test = ->
             headers:
               accept: "application/json"
 
-          .when "authenticate", -> "foo 123"
+          .when "authenticate", ({ challenge }) ->
+
 
           .start()
 

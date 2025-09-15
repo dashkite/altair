@@ -5,6 +5,10 @@ import Request from "@dashkite/sky-sublime/request"
 import convert from "@dashkite/sublime/convert"
 import Cache from "./cache"
 
+Retries =
+  unauthorized:
+    limit: 3
+
 _run = Fn.pipe  [
   convert to: "fetch"
   fetch
@@ -25,6 +29,9 @@ run = ( specifier ) ->
 
   else
 
+    retries =
+      unauthorized: 0
+
     loop
 
       retry = false
@@ -44,13 +51,16 @@ run = ( specifier ) ->
       switch response?.description
         
         when "unauthorized"
-          if ( challenges = response.headers.get "www-authenticate" )?
+          if ( retries.unauthorized++ < Retries.unauthorized.limit )          
+            challenges = ( response.headers.get "www-authenticate" ) ? []
             authorization = yield { name: "authenticate", challenges }
             if authorization?
               retry = true
-              request = Request.make specifier
-              request.update Fn.tee ({ headers }) ->
-                headers.authorization = authorization
+              request = 
+                Request
+                  .make specifier
+                  .update Fn.tee ( input ) ->
+                    input.authorization = authorization
 
       break unless retry
 
