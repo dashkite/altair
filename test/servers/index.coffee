@@ -2,6 +2,8 @@ import express from "express"
 import cors from "cors"
 import * as Text from "@dashkite/joy/text"
 
+import api from "./api"
+
 Servers = 
 
   start: ->
@@ -27,6 +29,8 @@ Servers =
         # preflightContinue: false
 
       .use express.text()
+
+      .use express.json()
 
       .get "/status/:status", ( request, response ) ->
         response
@@ -56,11 +60,7 @@ Servers =
           .status 200
           .send "OK"
       
-      .get "/unauthorized", ( request, response ) ->
-
-        console.log 
-          method: request.method
-          authorization: request.get "authorization"
+      .get "/authorized", ( request, response ) ->
 
         if ( request.get "authorization" ) == "foo 123"
           response
@@ -72,7 +72,33 @@ Servers =
             .status 401
             .send "Unauthorized"
 
+      #
+      # Sky Extensions Start Here
+      #
+
+      .get "/", ( request, response ) ->
+        response
+          .status 200
+          .json api
+
+
+      .get "/greeting/:name", ( request, response ) ->
+        response
+          .status 200
+          .json greeting: "Hello"
+            
+
+      .put "/greeting/:name", ( request, response ) ->
+
+        console.log response.body
+
+        response
+          .status 200
+          .json response.body
+
       .listen 3001, -> servers[1].resolve()
+
+
 
 
     Promise.all servers.map ({ promise }) -> promise

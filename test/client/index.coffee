@@ -98,22 +98,80 @@ window.__test = ->
 
     test "authorization", [
 
+      test "with hint", ->
 
-      test "success", ->
+        response = await yield from HTTP.get
+          origin: "http://localhost:3001", 
+          target: "/authorized"
+          authorization: [ "foo" ]
+          headers:
+            accept: "application/json"
 
-        EventCoroutine
+        assert.equal 200, response.status
 
+      test "negotiated", ->
+
+        response = await EventCoroutine
           .make HTTP.get
             origin: "http://localhost:3001", 
-            target: "/unauthorized"
+            target: "/authorized"
             headers:
               accept: "application/json"
-
-          .when "authenticate", ({ challenge }) ->
-
-
+          .when "authenticate", -> true
           .start()
 
+        assert.equal 200, response.status
+
+      test "negotiation failure", ->
+
+        response = await EventCoroutine
+          .make HTTP.get
+            origin: "http://localhost:3001", 
+            target: "/authorized"
+            headers:
+              accept: "application/json"
+          .when "authenticate", -> false
+          .start()
+
+        assert.equal 401, response.status
+
+    ]
+
+    test "retries", [
+
+      test "service unavailable", ( counter = 0 ) ->
+
+        response = await EventCoroutine
+          .make HTTP.get
+            origin: "http://localhost:3001", 
+            target: "/status/503"
+            headers:
+              accept: "application/json"
+          .when "retry", ({ request }) ->
+            request.update ( input ) ->
+              if counter++ == 3
+                input.target = "/status/200"
+              input
+          .start()
+
+        assert.equal 3, counter
+
+      test "gateway timeout", ( counter = 0 ) ->
+
+        response = await EventCoroutine
+          .make HTTP.get
+            origin: "http://localhost:3001", 
+            target: "/status/504"
+            headers:
+              accept: "application/json"
+          .when "retry", ({ request }) ->
+            request.update ( input ) ->
+              if counter++ == 3
+                input.target = "/status/200"
+              input
+          .start()
+
+        assert.equal 3, counter
 
     ]
 

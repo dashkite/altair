@@ -1,13 +1,8 @@
 import * as Fn from "@dashkite/joy/function"
-import * as Time from "@dashkite/joy/time"
 import Request from "@dashkite/sky-sublime/request"
-# import convert from "@dashkite/sky-sublime/convert"
 import convert from "@dashkite/sublime/convert"
 import Cache from "./cache"
-
-Retries =
-  unauthorized:
-    limit: 3
+import Retries from "./retries"
 
 _run = Fn.pipe  [
   convert to: "fetch"
@@ -19,59 +14,81 @@ cache = undefined
 
 run = ( specifier ) ->
 
-  cache ?= await Cache.make "altair"
+  do ({ cache, request, response,
+    retries, retry, _retries, limit } = {}) ->
 
-  request = Request.make specifier
+    cache ?= await Cache.make "altair"
 
-  if ( response = await cache.match request )?
+    request = Request.make specifier
 
-    response
+    if ( response = await cache.match request )?
 
-  else
+      response
 
-    retries =
-      unauthorized: 0
+    else
 
-    loop
+      retries = Retries.make()
 
-      retry = false
-      
-      await cache.writethru request
+      loop
 
-      try
-        response = await _run request
-
-      catch error
-        # TODO retry logic  
-        # for now, just log the message
-        console.error error.message
-        if window.configuration.debug == true
-          console.error error.stack
-
-      switch response?.description
+        retry = false
         
-        when "unauthorized"
-          if ( retries.unauthorized++ < Retries.unauthorized.limit )          
-            challenges = ( response.headers.get "www-authenticate" ) ? []
-            authorization = yield { name: "authenticate", challenges }
-            if authorization?
-              retry = true
-              request = 
-                Request
-                  .make specifier
-                  .update Fn.tee ( input ) ->
-                    input.authorization = authorization
+        await cache.writethru request
 
-      break unless retry
+        try
+          response = await _run request
 
-    # If we have a real response--not from a cache
-    # hit--remove the cached version from our temporary
-    # cache. We also remove from our write-thru cache since
-    # we by now have the actual response or the original
-    # request has failed (in which case we want to remove
-    # the cached entry anyway)
-    cache.remove request
-    
-    response
+        catch error
+          if navigator.onLine != true
+            attempt = retries.make "offline"
+            retry = await yield from attempt.retry context: { request }
+            if retry then continue else throw error
+          else
+            throw error
+
+        switch response?.description
+
+          when "unauthorized"
+            attempt = retries.make "unauthorized"
+            if attempt.canRetry
+              attempt.increment()
+              challenges = ( response.headers.get "www-authenticate" ) ? []
+              authenticated = yield { name: "authenticate", challenges }
+              if authenticated == true
+                retry = true
+                request = 
+                  Request
+                    .make specifier
+                    .update Fn.tee ( input ) ->
+                      input.authorization = challenges
+
+          when "too many requests"
+            retry = yield {
+              name: "too many requests", 
+              request, response 
+            }
+            retry = ( retry == true )
+
+          when "service unavailable", "gateway timeout"
+            attempt = retries.make response.description
+            options = name: "retry", context: { request }
+            retry = await yield from attempt.retry options
+            if !retry
+              yield { 
+                name: response.description
+                request, response 
+              }
+
+        break unless retry
+
+      # If we have a real response--not from a cache
+      # hit--remove the cached version from our temporary
+      # cache. We also remove from our write-thru cache
+      # since we by now have the actual response or the
+      # original request has failed (in which case we want
+      # to remove the cached entry anyway)
+      cache.remove request
+      
+      response
 
 export default run

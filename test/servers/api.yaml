@@ -1,148 +1,16 @@
 resources:
 
-  happy sky:
-    template: /happy-sky/{alpha}/{beta}
+  greeting:
+    template: /greeting/{name}
     methods:
       get:
         response:
-          content-type: [ application/json ]
+          content-type: [ application/vnd.dashkite.greeting+json;version=1 ]
           status: [ 200 ]
-
       put:
         request:
-          content-type: [ application/json ]
+          authorization: [ foo ]
+          content-type: [ application/vnd.dashkite.greeting+json;version=1 ]
         response:
-          content-type: [ application/json ]
-          status: [ 200 ]
-
-      delete:
-        response:
-          status: [ 204 ]
-
-      post:
-        request:
-          content-type: [ application/json ]
-        response:
-          content-type: [ application/json ]
-          status: [ 201 ]
-
-  unhappy sky:
-    template: /unhappy-sky/{alpha}/{beta}
-    methods:
-      post:
-        response:
-          content-type: [ application/json ]
-          status: [ 202 ]
-
-  happy json:
-    template: /happy-json
-    methods:
-      put:
-        request:
-          content-type: [ application/json ]
-        response:
-          content-type: [ application/json ]
-          status: [ 200 ]
-
-  happy text:
-    template: /happy-text
-    methods:
-      put:
-        request:
-          content-type: [ text/plain ]
-        response:
-          content-type: [ text/plain ]
-          status: [ 200 ]
-
-  happy binary:
-    template: /happy-binary
-    methods:
-      put:
-        request:
-          content-type: [ image/webp ]
-        response:
-          content-type: [ image/webp ]
-          status: [ 200 ]
-
-  unhappy text:
-    template: /unhappy-text
-    methods:
-      put:
-        request:
-          content-type: [ text/plain ]
-        response:
-          content-type: [ text/plain ]
-          status: [ 200 ]
-
-  unhappy json:
-    template: /unhappy-json
-    methods:
-      put:
-        request:
-          content-type: [ application/json ]
-        response:
-          content-type: [ text/plain ]
-          status: [ 200 ]
-
-  cache:
-    template: /cache
-    methods:
-      get:
-        response:
-          content-type: [ application/json ]
-          status: [ 200 ]
-
-      put:
-        request:
-          content-type: [ application/json ]
-        response:
-          content-type: [ application/json ]
-          status: [ 200 ]
-
-      delete:
-        response:
-          status: [ 204 ]
-
-  happy rune:
-    template: /happy-rune
-    methods:
-      put:
-        request:
-          authorization: [ rune ]
-          content-type: [ application/json ]
-        response:
-          content-type: [ application/json ]
-          status: [ 200 ]
-
-  happy email:
-    template: /happy-email
-    methods:
-      put:
-        request:
-          authorization: [ rune, email ]
-          content-type: [ application/json ]
-        response:
-          content-type: [ application/json ]
-          status: [ 200 ]
-
-  unhappy rune:
-    template: /unhappy-rune
-    methods:
-      put:
-        request:
-          authorization: [ rune ]
-          content-type: [ application/json ]
-        response:
-          content-type: [ application/json ]
-          status: [ 200 ]
-
-  unhappy email:
-    template: /unhappy-email
-    methods:
-      put:
-        request:
-          authorization: [ rune ]
-          content-type: [ application/json ]
-        response:
-          content-type: [ application/json ]
+          content-type: [ application/vnd.dashkite.greeting+json;version=1 ]
           status: [ 200 ]
