@@ -61,7 +61,7 @@
     "@dashkite/genie-pug": "^0.4.1",
     "@dashkite/genie-release": "^0.5.0",
     "@dashkite/genie-yaml": "^0.8.0",
-    "@dashkite/reactive": "link:../reactive",
+    "@dashkite/reactive": "^0.7.17",
     "@dashkite/registry": "^0.17.11",
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "@dashkite/http-headers": "link:../http-headers",
-    "@dashkite/joy": "link:../joy",
+    "@dashkite/joy": "^0.12.21",
     "@dashkite/scout": "^0.5.0",
     "@dashkite/sierra": "link:../sierra",
     "@dashkite/sky-sublime": "link:../sky-sublime",
