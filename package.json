@@ -73,7 +73,7 @@
     "@dashkite/joy": "^0.12.22",
     "@dashkite/scout": "^0.5.0",
     "@dashkite/sierra": "^0.3.14",
-    "@dashkite/sky-sublime": "link:../sky-sublime",
+    "@dashkite/sky-sublime": "^0.0.1",
     "@dashkite/sublime": "^0.1.0"
   }
 }
