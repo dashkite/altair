@@ -30,7 +30,6 @@
       "browser": "./build/browser/src/cache/install.js",
       "node": "./build/node/src/cache/install.js"
     }
-
   },
   "files": [
     "build/browser/src",
@@ -67,7 +66,7 @@
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "puppeteer": "^24.16.1"
+    "puppeteer": "^24.22.0"
   },
   "dependencies": {
     "@dashkite/http-headers": "link:../http-headers",
