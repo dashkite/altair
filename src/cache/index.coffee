@@ -7,7 +7,7 @@ import { convert } from "@dashkite/sublime"
 class Cache
 
   @make: ( name ) ->
-    cache = await window.caches.open name
+    cache = await caches.open name
     Object.assign ( new @ ), { name, cache }
 
   # we don't need to check the method here because the
