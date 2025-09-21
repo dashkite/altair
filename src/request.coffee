@@ -1,94 +1,116 @@
 import * as Fn from "@dashkite/joy/function"
-import Request from "@dashkite/sky-sublime/request"
-import convert from "@dashkite/sublime/convert"
-import Cache from "./cache"
+import $convert from "@dashkite/sublime/convert"
+import $cache from "./cache"
 import Retries from "./retries"
 
-_run = Fn.pipe  [
-  convert to: "fetch"
-  fetch
-  convert to: "sublime"
-]
+request = ( $ ) ->
 
-cache = undefined
+  Cache = $cache $
 
-run = ( specifier ) ->
+  convert = Fn.curry Fn.binary $convert
 
-  do ({ cache, request, response,
-    retries, retry, _retries, limit } = {}) ->
+  _run = Fn.pipe  [
+    convert to: "fetch"
+    fetch
+    convert to: "sublime"
+  ]
 
-    cache ?= await Cache.make "altair"
+  cache = undefined
 
-    request = Request.make specifier
+  run = ( specifier ) ->
 
-    if ( response = await cache.match request )?
+    do ({ cache, request, response,
+      retries, retry, _retries, limit } = {}) ->
 
-      response
+      cache ?= await Cache.make "altair"
 
-    else
+      request = $.Request.Builder.make specifier
 
-      retries = Retries.make()
+      if ( response = await cache.match request )?
 
-      loop
+        response
 
-        retry = false
-        
-        await cache.writethru request
+      else
 
-        try
-          response = await _run request
+        retries = Retries.make()
 
-        catch error
-          if navigator.onLine != true
-            attempt = retries.make "offline"
-            retry = await yield from attempt.retry context: { request }
-            if retry then continue else throw error
-          else
-            throw error
+        loop
 
-        switch response?.description
+          retry = false
+          
+          await cache.writethru request
 
-          when "unauthorized"
-            attempt = retries.make "unauthorized"
-            if attempt.canRetry
-              attempt.increment()
-              challenges = ( response.headers.get "www-authenticate" ) ? []
-              authenticated = yield { name: "authenticate", challenges }
-              if authenticated == true
-                retry = true
-                request = 
-                  Request
-                    .make specifier
-                    .update Fn.tee ( input ) ->
-                      input.authorization = challenges
+          try
+            response = await _run request
 
-          when "too many requests"
-            retry = yield {
-              name: "too many requests", 
-              request, response 
-            }
-            retry = ( retry == true )
+          catch error
+            if navigator.onLine != true
+              attempt = retries.make "offline"
+              retry = await yield from attempt.retry context: { request }
+              if retry then continue else throw error
+            else
+              yield { name: "error", error }
+              break
 
-          when "service unavailable", "gateway timeout"
-            attempt = retries.make response.description
-            options = name: "retry", context: { request }
-            retry = await yield from attempt.retry options
-            if !retry
-              yield { 
-                name: response.description
+          switch response?.description
+
+            when "unauthorized"
+              yield {
+                name: "unauthorized"
+                request, response
+              }
+              attempt = retries.make "unauthorized"
+              if attempt.canRetry
+                attempt.increment()
+                challenges = ( response.headers.get "www-authenticate" ) ? []
+                authenticated = yield { name: "authenticate", challenges }
+                if authenticated == true
+                  retry = true
+                  request = 
+                    $.Request.Builder
+                      .make specifier
+                      .update Fn.tee ( input ) ->
+                        input.authorization = challenges
+
+            when "too many requests"
+              retry = yield {
+                name: "too many requests", 
                 request, response 
               }
+              retry = ( retry == true )
 
-        break unless retry
+            when "service unavailable", "gateway timeout"
+              attempt = retries.make response.description
+              options = name: "retry", context: { request }
+              retry = await yield from attempt.retry options
+              if !retry
+                yield { 
+                  name: response.description
+                  request, response 
+                }
+            
+            else
+              yield {
+                name: response.description
+                request, response
+              }
 
-      # If we have a real response--not from a cache
-      # hit--remove the cached version from our temporary
-      # cache. We also remove from our write-thru cache
-      # since we by now have the actual response or the
-      # original request has failed (in which case we want
-      # to remove the cached entry anyway)
-      cache.remove request
-      
-      response
+          break unless retry
 
-export default run
+        # If we have a real response--not from a cache
+        # hit--remove the cached version from our temporary
+        # cache. We also remove from our write-thru cache
+        # since we by now have the actual response or the
+        # original request has failed (in which case we want
+        # to remove the cached entry anyway)
+        cache.remove request
+        
+        if response?
+          if response.ok
+            yield { name: "success", response }
+          else
+            yield { name: "failure", response }
+
+        response
+
+export default request

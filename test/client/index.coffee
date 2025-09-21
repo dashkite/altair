@@ -1,8 +1,14 @@
 import assert from "@dashkite/assert"
 import { test, success } from "@dashkite/amen"
 import EventCoroutine from "@dashkite/reactive/event-coroutine"
+import Sublime from "@dashkite/sublime"
+import sky from "@dashkite/sky-sublime"
 
-import HTTP from "../../src"
+import Altair from "../../src"
+
+HTTP = Altair
+  .make()
+  .use Sublime.make [ sky ]
 
 import "./authorizers"
 

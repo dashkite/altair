@@ -1,36 +1,37 @@
-import { Response, Request } from "@dashkite/sky-sublime"
-import { convert } from "@dashkite/sublime"
+import convert from "@dashkite/sublime/convert"
 
 # Adapt the cache interface for use with Sublime and write-
 # thru caching. Q: does this belong in Sublime?
 
-class Cache
+cache = ({ Request, Response }) ->
 
-  @make: ( name ) ->
-    cache = await caches.open name
-    Object.assign ( new @ ), { name, cache }
+  class Cache
 
-  # we don't need to check the method here because the
-  # browser does it for us
-  match: ( request ) ->
-    _response = await @cache.match await convert to: "fetch", request
+    @make: ( name ) ->
+      cache = await caches.open name
+      Object.assign ( new @ ), { name, cache }
 
-    if _response?
-      convert to: "sublime", _response
+    # we don't need to check the method here because the
+    # browser does it for us
+    match: ( request ) ->
+      _response = await @cache.match await convert to: "fetch", request
 
-  writethru: ( request ) ->
-    if request.method == "put"
-      _request = await @cache.match await convert to: "fetch",
-        Request.make {
-          request.data...
-          method: "get"
-          content: undefined 
-        }
-      _response = await convert "fetch", 
-        Response.make { status: 200, content: request.content }
-      @cache.put _request, _response
+      if _response?
+        convert to: "sublime", _response
 
-  remove: ( request ) ->
-    @cache.delete await convert to: "fetch", request
+    writethru: ( request ) ->
+      if request.method == "put"
+        _request = await @cache.match await convert to: "fetch",
+          Request.make {
+            request.data...
+            method: "get"
+            content: undefined 
+          }
+        _response = await convert "fetch", 
+          Response.make { status: 200, content: request.content }
+        @cache.put _request, _response
 
-export default Cache
+    remove: ( request ) ->
+      @cache.delete await convert to: "fetch", request
+
+export default cache

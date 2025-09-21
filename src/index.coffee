@@ -1,15 +1,19 @@
 import request from "./request"
 
-HTTP =
+class Altair
 
-  get: ( specifier ) -> HTTP.request { method: "get", specifier... }
+  @make: -> new @
 
-  put: ( specifier ) -> HTTP.request { method: "put", specifier... }
+  use: ( sublime ) ->
+    @request = request sublime
+    @
 
-  delete: ( specifier ) -> HTTP.request { method: "delete", specifier... }
+  get: ( specifier ) -> @request { method: "get", specifier... }
 
-  post: ( specifier ) -> HTTP.request { method: "post", specifier... }
+  put: ( specifier ) -> @request { method: "put", specifier... }
 
-  request: request
+  delete: ( specifier ) -> @request { method: "delete", specifier... }
 
-export default HTTP
+  post: ( specifier ) -> @request { method: "post", specifier... }
+
+export default Altair
