@@ -4,13 +4,12 @@ import EventCoroutine from "@dashkite/reactive/event-coroutine"
 import Sublime from "@dashkite/sublime"
 import sky from "@dashkite/sky-sublime"
 
+import "./authorizers"
 import Altair from "../../src"
 
 HTTP = Altair
   .make()
   .use Sublime.make [ sky ]
-
-import "./authorizers"
 
 window.__test = ->
 
