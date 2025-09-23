@@ -72,8 +72,8 @@
     "@dashkite/http-headers": "^0.12.37",
     "@dashkite/joy": "^0.12.23",
     "@dashkite/scout": "^0.5.0",
-    "@dashkite/sierra": "^0.3.14",
-    "@dashkite/sky-sublime": "^0.1.2",
+    "@dashkite/sierra": "^0.3.15",
+    "@dashkite/sky-sublime": "^0.1.3",
     "@dashkite/sublime": "^0.2.0"
   }
 }
