@@ -2,12 +2,19 @@ import * as Time from "@dashkite/joy/time"
 import * as Text from "@dashkite/joy/text"
 import Backoff from "./backoff"
 
+# adapted from ky [1]
+getRetryHeader = ( response ) ->
+  ( response.headers.get "retry-after" ) ?
+    ( response.headers.get "ratelimit-reset" ) ?
+    ( response.headers.get "x-ratelimit-reset" ) ?
+    ( response.headers.get "x-rate-limit-reset" )
+
 class HTTP extends Backoff
 
   retry: ( response ) ->
     wait = switch response.description
       when "content too large", "too many requests", "service unavailable"
-        if ( after = response.headers.get "retry-after" )?
+        if ( after = getRetryHeader response )?
           if ( seconds = Text.parseNumber after ) != Number.isNaN
             # make sure this isn't a timestamp [1]
             ( seconds -= Date.now()) if ( seconds >= 1e9 )

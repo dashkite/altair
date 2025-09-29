@@ -46,12 +46,9 @@ request = ( $ ) ->
             response = await _run request
 
           catch error
-            if navigator.onLine != true
-              if retries.offline.retry()
-                retry = true
-                continue
-              else
-                throw error
+            if ( navigator.onLine != true )
+              retry = await retries.offline.retry()
+              continue
             else
               yield { name: "error", error }
               break

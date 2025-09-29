@@ -1,6 +1,7 @@
 import * as Time from "@dashkite/joy/time"
 import Retry from "./retry"
 
+# avoid thundering herds!
 randomize = ( start, end  ) ->
   start + ( Math.floor ( Math.random() * ( end - start )))
 
