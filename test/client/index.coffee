@@ -154,7 +154,7 @@ window.__test = ->
               accept: "application/json"
           .when "retry", ({ request }) ->
             request.update ( input ) ->
-              if counter++ == 3
+              if counter++ == 2
                 input.target = "/status/200"
               input
           .start()
@@ -171,7 +171,7 @@ window.__test = ->
               accept: "application/json"
           .when "retry", ({ request }) ->
             request.update ( input ) ->
-              if counter++ == 3
+              if counter++ == 2
                 input.target = "/status/200"
               input
           .start()

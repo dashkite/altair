@@ -1,7 +1,7 @@
 import * as Fn from "@dashkite/joy/function"
 import $convert from "@dashkite/sublime/convert"
 import $cache from "./cache"
-import Retries from "./retries"
+import * as Retry from "./retry"
 
 request = ( $ ) ->
 
@@ -19,8 +19,7 @@ request = ( $ ) ->
 
   run = ( specifier ) ->
 
-    do ({ cache, request, response,
-      retries, retry, _retries, limit } = {}) ->
+    do ({ cache, request, response, retry, retries } = {}) ->
 
       cache ?= await Cache.make "altair"
 
@@ -32,7 +31,10 @@ request = ( $ ) ->
 
       else
 
-        retries = Retries.make()
+        retries =
+          offline: Retry.Backoff.make()
+          unauthorized: Retry.Counter.make()
+          http: Retry.HTTP.make()
 
         loop
 
@@ -45,9 +47,11 @@ request = ( $ ) ->
 
           catch error
             if navigator.onLine != true
-              attempt = retries.make "offline"
-              retry = await yield from attempt.retry context: { request }
-              if retry then continue else throw error
+              if retries.offline.retry()
+                retry = true
+                continue
+              else
+                throw error
             else
               yield { name: "error", error }
               break
@@ -55,13 +59,7 @@ request = ( $ ) ->
           switch response?.description
 
             when "unauthorized"
-              yield {
-                name: "unauthorized"
-                request, response
-              }
-              attempt = retries.make "unauthorized"
-              if attempt.canRetry
-                attempt.increment()
+              if retries.unauthorized.retry()
                 challenges = ( response.headers.get "www-authenticate" ) ? []
                 authenticated = yield { name: "authenticate", challenges }
                 if authenticated == true
@@ -72,30 +70,11 @@ request = ( $ ) ->
                       .update Fn.tee ( input ) ->
                         input.authorization = challenges
 
-            when "too many requests"
-              retry = yield {
-                name: "too many requests", 
-                request, response 
-              }
-              retry = ( retry == true )
-
-            when "service unavailable", "gateway timeout"
-              attempt = retries.make response.description
-              options = name: "retry", context: { request }
-              retry = await yield from attempt.retry options
-              if !retry
-                yield { 
-                  name: response.description
-                  request, response 
-                }
+            when "too many requests", "service unavailable", "gateway timeout"
+              retry = await retries.http.retry response
             
-            else
-              yield {
-                name: response.description
-                request, response
-              }
-
           break unless retry
+          request = ( yield { name: "retry", request }) ? request
 
         # If we have a real response--not from a cache
         # hit--remove the cached version from our temporary
@@ -106,10 +85,16 @@ request = ( $ ) ->
         cache.remove request
         
         if response?
+
+          yield { 
+            name: response.description
+            request, response 
+          }
+
           if response.ok
-            yield { name: "success", response }
+            yield { name: "success", request, response }
           else
-            yield { name: "failure", response }
+            yield { name: "failure", request, response }
 
         response
 
