@@ -66,13 +66,13 @@
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "puppeteer": "^24.22.0"
+    "puppeteer": "^24.22.3"
   },
   "dependencies": {
     "@dashkite/http-headers": "^0.12.37",
-    "@dashkite/joy": "^0.12.23",
+    "@dashkite/joy": "^0.12.24",
     "@dashkite/scout": "^0.5.0",
-    "@dashkite/sierra": "^0.3.15",
+    "@dashkite/sierra": "^0.3.16",
     "@dashkite/sky-sublime": "link:../sky-sublime",
     "@dashkite/sublime": "link:../sublime"
   }
