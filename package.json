@@ -71,6 +71,7 @@
   "dependencies": {
     "@dashkite/http-headers": "^0.12.37",
     "@dashkite/joy": "^0.12.25",
+    "@dashkite/retry": "link:../retry",
     "@dashkite/scout": "^0.5.0",
     "@dashkite/sierra": "^0.3.17",
     "@dashkite/sky-sublime": "link:../sky-sublime",

@@ -1,7 +1,7 @@
 import * as Fn from "@dashkite/joy/function"
 import $convert from "@dashkite/sublime/convert"
 import $cache from "./cache"
-import * as Retry from "./retry"
+import * as Retry from "@dashkite/retry"
 
 request = ( $ ) ->
 
