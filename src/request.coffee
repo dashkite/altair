@@ -18,40 +18,45 @@ request = ( $ ) ->
   cache = undefined
 
   run = ( specifier ) ->
+    do ( request = undefined ) ->
 
-    do ({ cache, request, response, retry, retries } = {}) ->
+      try
 
-      cache ?= await Cache.make "altair"
+        cache ?= await Cache.make "altair"
 
-      request = $.Request.Builder.make specifier
+        request = $.Request.Builder.make specifier
 
-      if ( response = await cache.match request )?
+        if ( response = await cache.match request )?
+          yield { 
+            name: response.description.toLowerCase().replace /\s+/g, "-"
+            request, response 
+          }
+          yield { name: "success", request, response }
+          response
 
-        response
+        else
 
-      else
+          retries =
+            offline: Retry.Backoff.make()
+            unauthorized: Retry.Counter.make()
+            http: Retry.HTTP.make()
 
-        retries =
-          offline: Retry.Backoff.make()
-          unauthorized: Retry.Counter.make()
-          http: Retry.HTTP.make()
+          loop
 
-        loop
+            retry = false
+            
+            await cache.writethru request
 
-          retry = false
-          
-          await cache.writethru request
+            try
+              response = await _run request
 
-          try
-            response = await _run request
-
-          catch error
-            if ( navigator.onLine != true )
-              retry = await retries.offline.retry()
-              continue
-            else
-              yield { name: "error", error }
-              break
+            catch error
+              if ( navigator.onLine != true )
+                retry = await retries.offline.retry()
+                continue
+              else
+                yield { name: "error", error }
+                break
 
           switch response?.description
 
@@ -79,12 +84,12 @@ request = ( $ ) ->
         # since we by now have the actual response or the
         # original request has failed (in which case we want
         # to remove the cached entry anyway)
-        cache.remove request
+        await cache.remove request
         
         if response?
 
           yield { 
-            name: response.description
+            name: response.description.toLowerCase().replace /\s+/g, "-"
             request, response 
           }
 
@@ -94,5 +99,8 @@ request = ( $ ) ->
             yield { name: "failure", request, response }
 
         response
+
+    catch error
+      yield { name: "error", error }
 
 export default request

@@ -25,11 +25,11 @@ cache = ({ Request, Response }) ->
           Request.make {
             request.data...
             method: "get"
-            content: undefined 
+            content: undefined
           }
-        _response = await convert "fetch", 
+        _response = await convert "fetch",
           Response.make { status: 200, content: request.content }
-        @cache.put _request, _response
+        await @cache.put _request, _response
 
     remove: ( request ) ->
       @cache.delete await convert to: "fetch", request
