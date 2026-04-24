@@ -19,7 +19,6 @@ window.__test = ->
 
       test "get", [
 
-        # TODO add support for generator functions to amen
         test "ok", ->
 
           response = await yield from HTTP.get 

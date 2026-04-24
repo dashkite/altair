@@ -3,6 +3,14 @@ import $convert from "@dashkite/sublime/convert"
 import $cache from "./cache"
 import * as Retry from "@dashkite/retry"
 
+Normalize =
+  name: ( string ) -> string.toLowerCase().replace /\s+/g, "-"
+  error: ( error ) ->
+    if ( match = error.message.match /^(?:Error:\s*)?sublime:\s*(.+)$/i )
+      @name match[1]
+    else
+      "error"
+
 request = ( $ ) ->
 
   Cache = $cache $
@@ -18,8 +26,10 @@ request = ( $ ) ->
   cache = undefined
 
   run = ( specifier ) ->
-    do ( request = undefined ) ->
 
+    # shadows the request function
+    do ( request = undefined ) ->
+      scope = "request"
       try
 
         cache ?= await Cache.make "altair"
@@ -27,11 +37,10 @@ request = ( $ ) ->
         request = $.Request.Builder.make specifier
 
         if ( response = await cache.match request )?
-          yield { 
-            name: response.description.toLowerCase().replace /\s+/g, "-"
-            request, response 
-          }
-          yield { name: "success", request, response }
+          scope = "response"
+          name = Normalize.name response.description
+          yield { name, scope, request, response }
+          yield { name: "success", scope, request, response }
           response
 
         else
@@ -49,58 +58,57 @@ request = ( $ ) ->
 
             try
               response = await _run request
-
+              scope = "response"
             catch error
+              scope = "request"
               if ( navigator.onLine != true )
                 retry = await retries.offline.retry()
                 continue
               else
-                yield { name: "error", error }
+                name = Normalize.error error
+                yield { name, scope, error }
                 break
 
-          switch response?.description
+            switch response?.description
 
-            when "unauthorized"
-              if retries.unauthorized.retry()
-                challenges = ( response.headers.get "www-authenticate" ) ? []
-                authenticated = yield { name: "authenticate", challenges }
-                if authenticated == true
-                  retry = true
-                  request = 
-                    $.Request.Builder
-                      .make specifier
-                      .update Fn.tee ( input ) ->
-                        input.authorization = challenges
+              when "unauthorized"
+                if retries.unauthorized.retry()
+                  challenges = ( response.headers.get "www-authenticate" ) ? []
+                  authenticated = yield { 
+                    name: "authenticate"
+                    scope: "request"
+                    challenges 
+                  }
+                  if authenticated == true
+                    retry = true
+                    request = 
+                      $.Request.Builder
+                        .make specifier
+                        .update Fn.tee ( input ) ->
+                          input.authorization = challenges
 
-            when "too many requests", "service unavailable", "gateway timeout"
-              retry = await retries.http.retry response
+              when "too many requests", "service unavailable", "gateway timeout"
+                retry = await retries.http.retry response
             
-          break unless retry
-          request = ( yield { name: "retry", request }) ? request
+            break unless retry
+            request = ( yield { name: "retry", scope: "request", request }) ? request
 
-        # If we have a real response--not from a cache
-        # hit--remove the cached version from our temporary
-        # cache. We also remove from our write-thru cache
-        # since we by now have the actual response or the
-        # original request has failed (in which case we want
-        # to remove the cached entry anyway)
-        await cache.remove request
-        
-        if response?
+          await cache.remove request
+          
+          if response?
+            scope = "response"
+            name = Normalize.name response.description
+            yield { name, scope, request, response }
 
-          yield { 
-            name: response.description.toLowerCase().replace /\s+/g, "-"
-            request, response 
-          }
+            if response.ok
+              yield { name: "success", scope, request, response }
+            else
+              yield { name: "failure", scope, request, response }
 
-          if response.ok
-            yield { name: "success", request, response }
-          else
-            yield { name: "failure", request, response }
+          response
 
-        response
-
-    catch error
-      yield { name: "error", error }
+      catch error
+        name = Normalize.error error
+        yield { name, scope, error }
 
 export default request
