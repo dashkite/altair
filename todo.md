@@ -4,8 +4,8 @@ Ordered by Cost/Benefit Ratio.
 
 - [x] [Remaining CRUD Methods](#remaining-crud-methods)
 - [x] [Retry Exhaustion](#retry-exhaustion)
-- [ ] [Specific HTTP Retry Conditions](#specific-http-retry-conditions)
-- [ ] [Caching Logic](#caching-logic)
+- [x] [Specific HTTP Retry Conditions](#specific-http-retry-conditions)
+- [x] [Caching Logic](#caching-logic)
 - [ ] [Offline Mode](#offline-mode)
 - [ ] [Malformed Response / Sublime Errors](#malformed-response--sublime-errors)
 

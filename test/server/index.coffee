@@ -1,4 +1,5 @@
 import express from "express"
+import { sleep } from "@dashkite/joy/time"
 
 app = express()
 
@@ -11,6 +12,10 @@ app = express()
 
   .get "/status/:code", ( request, response ) ->
     response.status( parseInt request.params.code ).send()
+
+  .put "/status/:code/:id", ( request, response ) ->
+    { id } = request.params
+    response.status( parseInt request.params.code ).json { id }
 
   .put "/status/:code", ( request, response ) ->
     response.status( parseInt request.params.code ).send()
@@ -66,27 +71,17 @@ app = express()
       else
         response.status( 200 ).json { message: "success", id }
 
-  #
-  # Sky Extensions Start Here
-  #
+  .get "/delay/:ms/:id", ( request, response ) ->
+    response
+      .status 200
+      .json id: request.params.id
 
-  # .get "/", ( request, response ) ->
-  #   response
-  #     .status 200
-  #     .json api
-
-
-  # .get "/greeting/:name", ( request, response ) ->
-  #   response
-  #     .status 200
-  #     .json greeting: "Hello"
-        
-
-  # .put "/greeting/:name", ( request, response ) ->
-  #   response
-  #     .status 200
-  #     .json response.body
-
+  .put "/delay/:ms/:id", ( request, response ) ->
+    delay = parseInt request.params.ms
+    await sleep delay
+    response
+      .status 200
+      .json id: request.params.id
 
 Server =
   start: ( port ) ->

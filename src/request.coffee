@@ -71,21 +71,27 @@ request = ( sublime ) ->
               retry = false
               scope = "request"
               
-
               try
                 response = await Metal.run request
+
               catch error
+
                 if ( globalThis.navigator?.onLine == false )
+
                   retry = await retries.offline.retry()
                   continue
+
                 else
+
                   name = Normalize.error error
                   yield { name, scope, error }
                   break
 
               if response?
+
                 scope = "response"
                 name = Normalize.name response.description
+
                 switch response.description
 
                   when "unauthorized"
@@ -134,6 +140,7 @@ request = ( sublime ) ->
               response
 
             else
+
               yield {
                 name: "failure"
                 scope
