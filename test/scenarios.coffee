@@ -501,29 +501,33 @@ scenarios = ({ scheme, domain, port }) ->
         pending
       ]
 
-    # subtest "data recovery on failure", ->
-    #   id = Address.make()
-    #   content = { id, data: "important" }
+    subtest "data recovery on failure", ->
 
-    #   # 1. Failing PUT (500)
-    #   events = HTTP.put {
-    #     origin
-    #     target: "/status/500/#{ id }"
-    #     content: content
-    #   }
+      id = Address.make()
+      content = { id, data: "important" }
 
-    #   # We might get retries depending on configuration, 
-    #   # so we loop until we get 'failure'
-    #   loop
-    #     { done, value } = await events.next()
-    #     assert !done
-    #     if value.name == "failure"
-    #       assert.equal "response", value.scope
-    #       # Verify content is still available for recovery
-    #       assert.deepEqual content, value.response.request.content
-    #       break
+      # 1. Failing PUT (500)
+      events = HTTP.put {
+        origin
+        target: "/status/500/#{ id }"
+        content: content
+      }
+
+      # We might get retries depending on configuration, 
+      # so we loop until we get 'failure'
+      loop
+        { done, value: { name, scope, request }} = 
+          await advance events, throw: false
+        assert !done
+        if name == "failure"
+          assert.equal "response", scope
+          # Verify content is still available for recovery
+          request = await request.get()
+          assert.deepEqual content, request.content
+          break
         
-    #   assert ( await events.next()).done
+      { done } = await advance events
+      assert done
 
   ]
 
