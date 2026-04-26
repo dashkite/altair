@@ -29,6 +29,7 @@ request = ( $ ) ->
 
     # shadows the request function
     do ( request = undefined ) ->
+
       scope = "request"
       try
 
@@ -61,7 +62,7 @@ request = ( $ ) ->
               scope = "response"
             catch error
               scope = "request"
-              if ( navigator.onLine != true )
+              if ( globalThis.navigator?.onLine == false )
                 retry = await retries.offline.retry()
                 continue
               else
@@ -72,6 +73,9 @@ request = ( $ ) ->
             switch response?.description
 
               when "unauthorized"
+                name = Normalize.name response.description
+                yield { name, scope, request, response }
+
                 if retries.unauthorized.retry()
                   challenges = ( response.headers.get "www-authenticate" ) ? []
                   authenticated = yield { 
@@ -97,8 +101,9 @@ request = ( $ ) ->
           
           if response?
             scope = "response"
-            name = Normalize.name response.description
-            yield { name, scope, request, response }
+            if response.description != "unauthorized"
+              name = Normalize.name response.description
+              yield { name, scope, request, response }
 
             if response.ok
               yield { name: "success", scope, request, response }

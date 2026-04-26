@@ -1,8 +1,5 @@
 import convert from "@dashkite/sublime/convert"
 
-# Adapt the cache interface for use with Sublime and write-
-# thru caching. Q: does this belong in Sublime?
-
 cache = ({ Request, Response }) ->
 
   class Cache
