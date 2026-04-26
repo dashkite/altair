@@ -1,6 +1,6 @@
 import * as Fn from "@dashkite/joy/function"
-import $convert from "@dashkite/sublime/convert"
-import $cache from "./cache"
+import convert from "@dashkite/sublime/convert"
+import cache from "./cache"
 import * as Retry from "@dashkite/retry"
 
 Normalize =
@@ -11,109 +11,137 @@ Normalize =
     else
       "error"
 
-request = ( $ ) ->
+Metal =
 
-  Cache = $cache $
+  run: do ( convert = Fn.curry Fn.binary convert ) ->
+    Fn.pipe  [
+      convert to: "fetch"
+      fetch
+      convert to: "sublime"
+    ]  
 
-  convert = Fn.curry Fn.binary $convert
+request = ( sublime ) ->
 
-  _run = Fn.pipe  [
-    convert to: "fetch"
-    fetch
-    convert to: "sublime"
-  ]
+  instance = Cache: cache sublime 
 
-  cache = undefined
+  do ({ Cache, cache } = instance ) ->
 
-  run = ( specifier ) ->
+    { Request } = sublime
+  
+    lifecycle = scope: "request"
 
-    # shadows the request function
-    do ( request = undefined ) ->
+    run = ( specifier ) ->
 
-      scope = "request"
-      try
+      do ({
+        request
+        response
+        scope
+        name
+        retry
+        retries
+        challenges
+        authenticated
+      } = lifecycle ) ->
 
-        cache ?= await Cache.make "altair"
+        try
 
-        request = $.Request.Builder.make specifier
+          cache ?= await Cache.make "altair"
 
-        if ( response = await cache.match request )?
-          scope = "response"
-          name = Normalize.name response.description
-          yield { name, scope, request, response }
-          yield { name: "success", scope, request, response }
-          response
+          request = Request.Builder.make specifier
 
-        else
+          if ( response = await cache.match request )?
+            yield { name: "cache-hit", scope, request, response }
+            scope = "response"
+            name = Normalize.name response.description
+            yield { name, scope, request, response }
+            yield { name: "success", scope, request, response }
+            response
 
-          retries =
-            offline: Retry.Backoff.make()
-            unauthorized: Retry.Counter.make()
-            http: Retry.HTTP.make()
+          else
 
-          loop
+            retries =
+              offline: Retry.Backoff.make()
+              unauthorized: Retry.Counter.make()
+              http: Retry.HTTP.make()
 
-            retry = false
-            
             await cache.writethru request
 
-            try
-              response = await _run request
-              scope = "response"
-            catch error
+            loop
+
+              retry = false
               scope = "request"
-              if ( globalThis.navigator?.onLine == false )
-                retry = await retries.offline.retry()
-                continue
-              else
-                name = Normalize.error error
-                yield { name, scope, error }
-                break
+              
 
-            switch response?.description
+              try
+                response = await Metal.run request
+              catch error
+                if ( globalThis.navigator?.onLine == false )
+                  retry = await retries.offline.retry()
+                  continue
+                else
+                  name = Normalize.error error
+                  yield { name, scope, error }
+                  break
 
-              when "unauthorized"
+              if response?
+                scope = "response"
                 name = Normalize.name response.description
-                yield { name, scope, request, response }
+                switch response.description
 
-                if retries.unauthorized.retry()
-                  challenges = ( response.headers.get "www-authenticate" ) ? []
-                  authenticated = yield { 
-                    name: "authenticate"
-                    scope: "request"
-                    challenges 
-                  }
-                  if authenticated == true
-                    retry = true
-                    request = 
-                      $.Request.Builder
-                        .make specifier
-                        .update Fn.tee ( input ) ->
-                          input.authorization = challenges
+                  when "unauthorized"
 
-              when "too many requests", "service unavailable", "gateway timeout"
-                retry = await retries.http.retry response
+                    yield { name, scope, request, response }
+
+                    if retries.unauthorized.retry()
+                      challenges = ( response.headers.get "www-authenticate" ) ? []
+                      authenticated = yield { 
+                        name: "authenticate"
+                        scope: "request"
+                        challenges 
+                      }
+                      if authenticated == true
+                        retry = true
+                        request = 
+                          Request.Builder
+                            .make specifier
+                            .update Fn.tee ( input ) ->
+                              input.authorization = challenges
+
+                  when "too many requests", "service unavailable", "gateway timeout"
+
+                    retry = await retries.http.retry response
+
+                    if !retry
+                      yield { name, scope, request, response }
+
+                  else
+                    yield { name, scope, request, response }
+
+              break unless retry
+              yield { name: "retry", scope: "request", request }
+
+            if response?
+
+              await cache.remove request
             
-            break unless retry
-            request = ( yield { name: "retry", scope: "request", request }) ? request
+              yield { 
+                name: if response.ok then "success" else "failure"
+                scope
+                request
+                response 
+              }
 
-          await cache.remove request
-          
-          if response?
-            scope = "response"
-            if response.description != "unauthorized"
-              name = Normalize.name response.description
-              yield { name, scope, request, response }
+              response
 
-            if response.ok
-              yield { name: "success", scope, request, response }
             else
-              yield { name: "failure", scope, request, response }
+              yield {
+                name: "failure"
+                scope
+                request
+              }
 
-          response
-
-      catch error
-        name = Normalize.error error
-        yield { name, scope, error }
+        catch error
+          name = Normalize.error error
+          yield { name, scope, error }
 
 export default request

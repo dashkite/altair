@@ -8,8 +8,8 @@ import Sublime from "@dashkite/sublime"
 import sky from "@dashkite/sky-sublime"
 import Altair from "@dashkite/altair"
 
-# trace = tap ( event ) ->
-#   console.log event: event.name
+trace = tap ( event ) ->
+  console.log { event }
 
 HTTP = Altair
   .make()
@@ -32,6 +32,7 @@ scenarios = ({ scheme, domain, port }) ->
       }
 
       { done, value: { name, scope, response }} = await events.next()
+      
       assert !done
       assert.equal "ok", name
       assert.equal "response", scope
@@ -56,6 +57,82 @@ scenarios = ({ scheme, domain, port }) ->
       assert.equal "response", scope
       assert.equal 201, response.status
       assert.equal "/status/200/9999", response.headers.get "location"
+
+      { done, value: { name }} = await events.next()
+      assert !done
+      assert.equal "success", name
+
+      { done } = await events.next()
+      assert done
+
+    subtest "put (ok)", ->
+      events = await HTTP.put {
+        origin
+        target: "/status/200"
+      }
+      
+      { done, value: { name, scope, response }} = await events.next()
+      assert !done
+      assert.equal "ok", name
+      assert.equal "response", scope
+      assert.equal 200, response.status
+
+      { done, value: { name }} = await events.next()
+      assert !done
+      assert.equal "success", name
+
+      { done } = await events.next()
+      assert done
+
+    subtest "put (created)", ->
+      events = await HTTP.put {
+        origin
+        target: "/status/201"
+      }
+      
+      { done, value: { name, scope, response }} = await events.next()
+      assert !done
+      assert.equal "created", name
+      assert.equal "response", scope
+      assert.equal 201, response.status
+
+      { done, value: { name }} = await events.next()
+      assert !done
+      assert.equal "success", name
+
+      { done } = await events.next()
+      assert done
+
+    subtest "delete (ok)", ->
+      events = await HTTP.delete {
+        origin
+        target: "/status/200"
+      }
+      
+      { done, value: { name, scope, response }} = await events.next()
+      assert !done
+      assert.equal "ok", name
+      assert.equal "response", scope
+      assert.equal 200, response.status
+
+      { done, value: { name }} = await events.next()
+      assert !done
+      assert.equal "success", name
+
+      { done } = await events.next()
+      assert done
+
+    subtest "delete (no-content)", ->
+      events = await HTTP.delete {
+        origin
+        target: "/status/204"
+      }
+      
+      { done, value: { name, scope, response }} = await events.next()
+      assert !done
+      assert.equal "no-content", name
+      assert.equal "response", scope
+      assert.equal 204, response.status
 
       { done, value: { name }} = await events.next()
       assert !done
@@ -89,13 +166,18 @@ scenarios = ({ scheme, domain, port }) ->
 
     subtest "pre-dispatch (request) errors", ->
       events = await HTTP.get {
-        origin: "invalid://"
+        origin: "http://unknown"
         target: "/status/200"
       }
 
       { done, value: { name, scope }} = await events.next()
       assert !done
       assert.equal "error", name
+      assert.equal "request", scope
+
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "failure", name
       assert.equal "request", scope
 
       { done } = await events.next()
@@ -138,17 +220,19 @@ scenarios = ({ scheme, domain, port }) ->
       secret = undefined
 
       authorizers = Sierra.make()
-      authorizers.add "Bearer",
+      authorizers.add "bearer",
         matches: -> secret?
         get: -> 
-          scheme: "Bearer"
-          token: secret
+          if secret?
+            scheme: "bearer"
+            token: secret
     
       Registry.set "authorizers", authorizers
 
       events = await HTTP.get {
         origin
         target: "/authorization"
+        authorization: [ "bearer" ]
       }
 
       # 1. Initial request fails with unauthorized
@@ -186,25 +270,135 @@ scenarios = ({ scheme, domain, port }) ->
 
       { done } = await events.next()
       assert done
+
+    subtest "retry exhaustion", ->
+      events = await HTTP.get {
+        origin
+        target: "/always-unauthorized"
+        authorization: [ "bearer" ]
+      }
+      
+      # Default limit for Retry.Counter is 3
+      for i in [ 1..3 ]
+
+        # Unauthorized attempt
+        { done, value: { name, scope }} = await events.next()
+        assert !done
+        assert.equal "unauthorized", name
+        assert.equal "response", scope
+
+        # Request to authenticate
+        { done, value: { name, scope }} = await events.next()
+        assert !done
+        assert.equal "authenticate", name
+        assert.equal "request", scope
+
+        # Resume with true to signal "retry"
+        { done, value: { name, scope }} = await events.next true
+        assert !done
+        assert.equal "retry", name
+        assert.equal "request", scope
+
+      # 4th attempt: it should NOT retry anymore
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "unauthorized", name
+      assert.equal "response", scope
+
+      # It should then yield failure
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "failure", name
+      assert.equal "response", scope
+
+      { done } = await events.next()
+      assert done
+
   ]
 
 
-  # "retries": [
+  "retries": [
 
-
-  #   subtest "server error", ->
-
-  #     # TODO there's no assertion here?
-  #     response = await EventCoroutine
-  #       .make HTTP.get {
-  #         origin
-  #         target: "/flakey"
-  #       }
-  #       .when "retry", ({ request }) -> request
-  #       .when "error", ({ error }) -> throw error
-  #       .start()
+    subtest "server error", ->
+      events = await HTTP.get {
+        origin
+        target: "/flakey/server-error"
+      }
       
-  #     assert.equal 200, response.status
-  # ]
+      # 1. First attempt fails (503), yields retry
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "retry", name
+      assert.equal "request", scope
+      
+      # 2. Second attempt succeeds (200)
+      { done, value: { name, scope, response }} = await events.next()
+      assert !done
+      assert.equal "ok", name
+      assert.equal "response", scope
+      assert.equal 200, response.status
+      
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "success", name
+      assert.equal "response", scope
+
+      { done } = await events.next()
+      assert done
+
+    subtest "too many requests (429)", ->
+      events = await HTTP.get {
+        origin
+        target: "/too-many-requests/retries"
+      }
+      
+      # 1. First attempt fails (429), yields retry
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "retry", name
+      assert.equal "request", scope
+      
+      # 2. Second attempt succeeds (200)
+      { done, value: { name, scope, response }} = await events.next()
+      assert !done
+      assert.equal "ok", name
+      assert.equal "response", scope
+      assert.equal 200, response.status
+      
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "success", name
+      assert.equal "response", scope
+
+      { done } = await events.next()
+      assert done
+
+    subtest "gateway timeout (504)", ->
+      events = await HTTP.get {
+        origin
+        target: "/gateway-timeout/retries"
+      }
+      
+      # 1. First attempt fails (504), yields retry
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "retry", name
+      assert.equal "request", scope
+      
+      # 2. Second attempt succeeds (200)
+      { done, value: { name, scope, response }} = await events.next()
+      assert !done
+      assert.equal "ok", name
+      assert.equal "response", scope
+      assert.equal 200, response.status
+      
+      { done, value: { name, scope }} = await events.next()
+      assert !done
+      assert.equal "success", name
+      assert.equal "response", scope
+
+      { done } = await events.next()
+      assert done
+  ]
 
 export default scenarios
