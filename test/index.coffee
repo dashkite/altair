@@ -40,7 +40,8 @@ do ->
       await Promise.all results
 
       for name, runner of sequential
-        results.push await test name, runner context
+        results.push await test name, 
+          await runner context
 
     catch error
       throw error

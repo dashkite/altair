@@ -81,7 +81,6 @@ request = ( sublime ) ->
                 if ( globalThis.navigator?.onLine == false )
 
                   retry = await retries.offline.retry()
-                  continue
 
                 else
 

@@ -6,7 +6,7 @@ import { Address, HTTP, subtest, advance, trace } from "./helpers"
 
 export default ({ start, stop, port, origin }) -> [
 
-  subtest "success after network restoration", ->
+  await subtest "success after network restoration", ->
 
     id = Address.make()
     
@@ -42,7 +42,9 @@ export default ({ start, stop, port, origin }) -> [
     { done } = await advance events
     assert done
 
-  subtest "failure if network remains offline", ->
+    await run events
+
+  await subtest "failure if network remains offline", ->
 
     id = Address.make()
     
@@ -62,6 +64,6 @@ export default ({ start, stop, port, origin }) -> [
     # Then restore so we can finish and clean up
     globalThis.navigator.onLine = true
     await start port
-    await run events
+    run events
 
 ]

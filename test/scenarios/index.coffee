@@ -7,4 +7,5 @@ export default ->
     "retries": ( await import( "./retries" ) ).default
     "caching": ( await import( "./caching" ) ).default
     "sublime errors": ( await import( "./sublime-errors" ) ).default
-  sequential: {}
+  sequential:
+    "offline": ( await import( "./offline" ) ).default
