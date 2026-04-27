@@ -31,20 +31,20 @@ cache = ({ Request, Response }) ->
         convert to: "sublime", _response
 
     writethru: ( request ) ->
-      request = await request.get()
       switch request.method
         when "put"
           _request = await Synthetic.request request
           _response = await Synthetic.response request
-          @cache.put _request, _response
+          await @cache.put _request, _response
         when "delete"
-          @cache.delete await Synthetic.request request
+          await @cache.delete await Synthetic.request request
 
     remove: ( request ) ->
-      request = await request.get()
+      _request = await convert to: "fetch", request
+      await @cache.delete _request
       switch request.method
         when "put", "delete"
-          @cache.delete await Synthetic.request request
+          await @cache.delete await Synthetic.request request
 
 
 export default cache

@@ -47,7 +47,9 @@ request = ( sublime ) ->
 
           cache ?= await Cache.make "altair"
 
-          request = Request.Builder.make specifier
+          request = await Request.Builder
+            .make specifier
+            .get()
 
           if ( response = await cache.match request )?
             yield { name: "cache-hit", scope, request, response }
@@ -107,11 +109,11 @@ request = ( sublime ) ->
                       }
                       if authenticated == true
                         retry = true
-                        request = 
-                          Request.Builder
-                            .make specifier
-                            .update Fn.tee ( input ) ->
-                              input.authorization = challenges
+                        request = await Request.Builder
+                          .make specifier
+                          .update Fn.tee ( input ) ->
+                            input.authorization = challenges
+                          .get()
 
                   when "too many requests", "service unavailable", "gateway timeout"
 

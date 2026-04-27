@@ -1,6 +1,8 @@
 # set up fetch API
 import "@dashkite/altair/install"
 
+globalThis.navigator ?= onLine: true
+
 import { test } from "@dashkite/amen"
 import print from "@dashkite/amen-console"
 

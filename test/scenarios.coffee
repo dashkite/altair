@@ -447,8 +447,12 @@ scenarios = ({ scheme, domain, port }) ->
       assert.equal id, response.content.id
 
       # cache-hit is followed by the response description and success
-      await advance events # ok/description
-      await advance events # success
+      { value: { scope: scope }} = await advance events # ok/description
+      assert.equal "response", scope
+      
+      { value: { scope: scope }} = await advance events # success
+      assert.equal "response", scope
+      
       { done } = await advance events
       assert done
 
@@ -516,18 +520,72 @@ scenarios = ({ scheme, domain, port }) ->
       # We might get retries depending on configuration, 
       # so we loop until we get 'failure'
       loop
-        { done, value: { name, scope, request }} = 
-          await advance events, throw: false
+        { done, value } = await advance events, throw: false
         assert !done
-        if name == "failure"
-          assert.equal "response", scope
+        if value.name == "failure"
+          assert.equal "response", value.scope
           # Verify content is still available for recovery
-          request = await request.get()
-          assert.deepEqual content, request.content
+          assert.deepEqual content, value.request.content
           break
         
       { done } = await advance events
       assert done
+
+  ]
+
+  "offline": [
+
+    subtest "success after network restoration", ->
+      id = Address.make()
+      
+      # 1. Start offline
+      globalThis.navigator.onLine = false
+      
+      events = HTTP.get {
+        origin
+        target: "/status/200/#{ id }"
+      }
+      
+      # 2. Should yield retry (from offline backoff)
+      { done, value: { name, scope }} = await advance events
+      assert !done
+      assert.equal "retry", name
+      assert.equal "request", scope
+      
+      # 3. Restore network
+      globalThis.navigator.onLine = true
+      
+      # 4. Resume and succeed
+      { done, value: { name, scope }} = await advance events
+      assert !done
+      assert.equal "ok", name
+      assert.equal "response", scope
+      
+      { done, value: { name }} = await advance events
+      assert !done
+      assert.equal "success", name
+      
+      { done } = await advance events
+      assert done
+
+    subtest "failure if network remains offline", ->
+      id = Address.make()
+      
+      # 1. Start and stay offline
+      globalThis.navigator.onLine = false
+      
+      events = HTTP.get {
+        origin
+        target: "/status/200/#{ id }"
+      }
+      
+      # Verify at least one retry occurs
+      { done, value: { name }} = await advance events
+      assert.equal "retry", name
+      
+      # Then restore so we can finish and clean up
+      globalThis.navigator.onLine = true
+      await start events
 
   ]
 
