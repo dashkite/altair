@@ -6,11 +6,11 @@
 
 ## Purpose
 
-Altair is a reactive HTTP client built on top of [Sublime](https://github.com/dashkite/sublime). It extends standard HTTP semantics with reactive streams and smart features like write-through caching and offline resilience. Altair methods return an async generator (reactor) that yields semantic events for every stage of the HTTP lifecycle.
+Altair is a reactive HTTP client built on top of [Sublime](https://github.com/dashkite/sublime). It extends standard HTTP semantics with reactive streams and smart features like write-through caching and retry logic. Altair methods return an async generator (reactor) that yields semantic events for every stage of the HTTP lifecycle.
 
 ### Differentiating Features
 
-- **Write-Through Caching**: Optimistically updates the local cache for `PUT` and `DELETE` operations, allowing applications to reflect state changes immediately without waiting for network confirmation.
+- **Write-Through Caching**: Optimistically updates the local cache for `put` and `delete` operations, allowing applications to reflect state changes immediately without waiting for network confirmation.
 - **Offline Resilience**: Automatically enters a backoff retry loop when the browser is offline, resuming seamlessly once network connectivity is restored.
 - **Protocol Normalization**: Translates HTTP status codes and errors into a consistent set of hyphenated protocol events.
 

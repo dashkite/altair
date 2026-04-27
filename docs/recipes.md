@@ -55,7 +55,7 @@ The reactive protocol automatically handles expired tokens. If a previously vali
 
 ## Optimistic HX with Write-Through Caching
 
-Use `PUT` or `DELETE` to optimistically update the cache. Subsequent `GET` requests for the same resource will yield a `cache-hit` immediately, even if the original update is still in flight.
+Use `put` or `delete` to optimistically update the cache. Subsequent `get` requests for the same resource will yield a `cache-hit` immediately, even if the original update is still in flight.
 
 ```coffee
 # 1. Update the resource (takes some time)

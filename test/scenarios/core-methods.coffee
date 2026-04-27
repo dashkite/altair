@@ -120,4 +120,61 @@ export default ({ origin }) -> [
     { done } = await advance events
     assert done
 
+  subtest "patch", ->
+    events = HTTP.patch {
+      origin
+      target: "/status/200"
+    }
+    
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "ok", name
+    assert.equal "response", scope
+    assert.equal 200, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+  subtest "head", ->
+    events = HTTP.head {
+      origin
+      target: "/status/200"
+    }
+    
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "ok", name
+    assert.equal "response", scope
+    assert.equal 200, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+  subtest "options", ->
+    events = HTTP.options {
+      origin
+      target: "/status/200"
+    }
+    
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "ok", name
+    assert.equal "response", scope
+    assert.equal 200, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
 ]

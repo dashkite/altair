@@ -15,22 +15,22 @@ Configures the Altair instance to use the provided Sublime instance for request 
 ### get
 $get: specifier \to reactor$
 
-Initiates an HTTP `GET` request. The `specifier` is passed to the Sublime Request Builder.
+Initiates an HTTP `get` request. The `specifier` is passed to the Sublime Request Builder.
 
 ### put
 $put: specifier \to reactor$
 
-Initiates an HTTP `PUT` request. Optimistically updates the write-through cache before dispatching.
+Initiates an HTTP `put` request. Optimistically updates the write-through cache before dispatching.
 
 ### post
 $post: specifier \to reactor$
 
-Initiates an HTTP `POST` request.
+Initiates an HTTP `post` request.
 
 ### delete
 $delete: specifier \to reactor$
 
-Initiates an HTTP `DELETE` request. Optimistically clears the write-through cache for the resource before dispatching.
+Initiates an HTTP `delete` request. Optimistically clears the write-through cache for the resource before dispatching.
 
 ## Reactor Events
 

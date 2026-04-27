@@ -16,4 +16,10 @@ class Altair
 
   post: ( specifier ) -> @request { method: "post", specifier... }
 
+  patch: ( specifier ) -> @request { method: "patch", specifier... }
+
+  head: ( specifier ) -> @request { method: "head", specifier... }
+
+  options: ( specifier ) -> @request { method: "options", specifier... }
+
 export default Altair

@@ -25,6 +25,15 @@ app = express()
       response.set "location", "/status/200/9999"
     response.status( parseInt request.params.code ).send()
 
+  .patch "/status/:code", ( request, response ) ->
+    response.status( parseInt request.params.code ).send()
+
+  .head "/status/:code", ( request, response ) ->
+    response.status( parseInt request.params.code ).send()
+
+  .options "/status/:code", ( request, response ) ->
+    response.status( parseInt request.params.code ).send()
+
   .delete "/status/:code", ( request, response ) ->
     response.status( parseInt request.params.code ).send()
 

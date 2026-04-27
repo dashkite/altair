@@ -4,9 +4,9 @@
 
 Altair implements an optimistic write-through cache to improve perceived performance and support immediate application updates.
 
-- **Populating**: When a `PUT` request is initiated, Altair automatically creates a synthetic `GET` entry in the local `altair` cache store. This entry uses the request's content as its body and is marked with an `OK` status.
-- **Invalidating**: When a `DELETE` request is initiated, Altair immediately removes the corresponding `GET` entry from the cache.
-- **Cleanup**: Once a `PUT` or `DELETE` request lifecycle ends (either through success or fatal failure), Altair removes any synthetic entries to ensure the application returns to standard HTTP caching semantics provided by the server.
+- **Populating**: When a `put` request is initiated, Altair automatically creates a synthetic `get` entry in the local `altair` cache store. This entry uses the request's content as its body and is marked with an `ok` status.
+- **Invalidating**: When a `delete` request is initiated, Altair immediately removes the corresponding `get` entry from the cache.
+- **Cleanup**: Once a `put` or `delete` request lifecycle ends (either through success or fatal failure), Altair removes any synthetic entries to ensure the application returns to standard HTTP caching semantics provided by the server.
 
 ### Reactive Authentication Protocol
 
