@@ -71,6 +71,12 @@ app = express()
       else
         response.status( 200 ).json { message: "success", id }
 
+  .get "/malformed-json", ( request, response ) ->
+    response
+      .status 200
+      .set "content-type", "application/json"
+      .send "{ invalid: json "
+
   .get "/delay/:ms/:id", ( request, response ) ->
     response
       .status 200
@@ -83,13 +89,14 @@ app = express()
       .status 200
       .json id: request.params.id
 
-Server =
-  start: ( port ) ->
-    new Promise ( resolve ) =>
-      @_server = app.listen port, -> resolve()
+server = undefined
 
-  stop: ->
-    new Promise ( resolve ) =>
-      @_server.close -> resolve()
+start = ( port ) ->
+  new Promise ( resolve ) ->
+    server = app.listen port, -> resolve()
 
-export default Server
+stop = ->
+  new Promise ( resolve ) ->
+    server.close -> resolve()
+
+export { start, stop }

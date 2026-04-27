@@ -6,7 +6,13 @@
 
 ## Purpose
 
-Altair is a reactive HTTP client built on top of [Sublime](https://github.com/dashkite/sublime). It provides high-level HTTP methods (`get`, `put`, `post`, `delete`) that return a generator (reactor), yielding events for various stages of the HTTP lifecycle, including content negotiation, authentication, and retries.
+Altair is a reactive HTTP client built on top of [Sublime](https://github.com/dashkite/sublime). It extends standard HTTP semantics with reactive streams and smart features like write-through caching and offline resilience. Altair methods return an async generator (reactor) that yields semantic events for every stage of the HTTP lifecycle.
+
+### Differentiating Features
+
+- **Write-Through Caching**: Optimistically updates the local cache for `PUT` and `DELETE` operations, allowing applications to reflect state changes immediately without waiting for network confirmation.
+- **Offline Resilience**: Automatically enters a backoff retry loop when the browser is offline, resuming seamlessly once network connectivity is restored.
+- **Protocol Normalization**: Translates HTTP status codes and errors into a consistent set of hyphenated protocol events.
 
 ## Installation
 
@@ -25,16 +31,17 @@ HTTP = Altair
   .use Sublime.make [ SkySublime ]
 
 # Perform a simple GET request
+# The reactor yields status events and finishes with the response
 response = await yield from HTTP.get 
-  origin: "https://api.example.com", 
+  origin: "https://api.example.com" 
   target: "/greeting"
 
 console.log response.content # { hello: "world" } (if JSON)
 ```
 
-### Reactive Events
+### Handling Events
 
-Altair yields events that can be handled using `@dashkite/reactive/event-coroutine`.
+Use `@dashkite/reactive/event-coroutine` to handle specific lifecycle events like authentication challenges or retries.
 
 ```coffee
 import EventCoroutine from "@dashkite/reactive/event-coroutine"
@@ -43,13 +50,18 @@ response = await EventCoroutine
   .make HTTP.get
     origin: "https://api.example.com"
     target: "/authorized"
-  .when "authenticate", -> true # Signal that we should retry with authentication
+  .when "authenticate", -> 
+    # Logic to provide credentials...
+    true # Signal that we should retry
   .start()
 ```
 
 ## Other Resources
 
 - [Reference](docs/reference.md)
+- [Recipes](docs/recipes.md)
+- [Technical Notes](docs/technical-notes.md)
+- [Testing Guide](docs/testing.md)
 
 ## Status
 

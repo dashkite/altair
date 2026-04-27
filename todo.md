@@ -7,7 +7,7 @@ Ordered by Cost/Benefit Ratio.
 - [x] [Specific HTTP Retry Conditions](#specific-http-retry-conditions)
 - [x] [Caching Logic](#caching-logic)
 - [ ] [Offline Mode](#offline-mode)
-- [ ] [Malformed Response / Sublime Errors](#malformed-response--sublime-errors)
+- [x] [Malformed Response / Sublime Errors](#malformed-response--sublime-errors)
 
 ## Notes
 

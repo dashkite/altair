@@ -1,0 +1,123 @@
+import assert from "@dashkite/assert"
+import { HTTP, subtest, advance } from "./helpers"
+
+export default ({ origin }) -> [
+
+  subtest "get", ->
+
+    events = HTTP.get { 
+      origin
+      target: "/status/200" 
+    }
+
+    { done, value: { name, scope, response }} = await advance events
+    
+    assert !done
+    assert.equal "ok", name
+    assert.equal "response", scope
+    assert.equal 200, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+  subtest "post (created)", ->
+    events = HTTP.post {
+      origin
+      target: "/status/201"
+    }
+
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "created", name
+    assert.equal "response", scope
+    assert.equal 201, response.status
+    assert.equal "/status/200/9999", response.headers.get "location"
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+  subtest "put (ok)", ->
+    events = HTTP.put {
+      origin
+      target: "/status/200"
+    }
+    
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "ok", name
+    assert.equal "response", scope
+    assert.equal 200, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+  subtest "put (created)", ->
+    events = HTTP.put {
+      origin
+      target: "/status/201"
+    }
+    
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "created", name
+    assert.equal "response", scope
+    assert.equal 201, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+  subtest "delete (ok)", ->
+    events = HTTP.delete {
+      origin
+      target: "/status/200"
+    }
+    
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "ok", name
+    assert.equal "response", scope
+    assert.equal 200, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+  subtest "delete (no-content)", ->
+    events = HTTP.delete {
+      origin
+      target: "/status/204"
+    }
+    
+    { done, value: { name, scope, response }} = await advance events
+    assert !done
+    assert.equal "no-content", name
+    assert.equal "response", scope
+    assert.equal 204, response.status
+
+    { done, value: { name }} = await advance events
+    assert !done
+    assert.equal "success", name
+
+    { done } = await advance events
+    assert done
+
+]

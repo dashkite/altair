@@ -152,5 +152,6 @@ request = ( sublime ) ->
         catch error
           name = Normalize.error error
           yield { name, scope, error }
+          yield { name: "failure", scope, request, error }
 
 export default request

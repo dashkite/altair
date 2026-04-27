@@ -20,7 +20,7 @@ Initiates an HTTP `GET` request. The `specifier` is passed to the Sublime Reques
 ### put
 $put: specifier \to reactor$
 
-Initiates an HTTP `PUT` request.
+Initiates an HTTP `PUT` request. Optimistically updates the write-through cache before dispatching.
 
 ### post
 $post: specifier \to reactor$
@@ -30,38 +30,48 @@ Initiates an HTTP `POST` request.
 ### delete
 $delete: specifier \to reactor$
 
-Initiates an HTTP `DELETE` request.
+Initiates an HTTP `DELETE` request. Optimistically clears the write-through cache for the resource before dispatching.
 
 ## Reactor Events
 
-Altair yields the following events:
+Altair yields event objects with the following schema:
+- `name`: Lowercase hyphenated string (e.g., `not-found`).
+- `scope`: Either `"request"` or `"response"`.
+- `request`: The `Sublime.Value` representing the request.
+- `response`: The `Sublime.Value` representing the response (if available).
+- `error`: The error object (for `error` events).
 
-### error
-`{ name: "error", error }`
+### cache-hit
+`{ name: "cache-hit", scope: "request", request, response }`
 
-Yielded when an unrecoverable error occurs (e.g., network failure while offline).
+Yielded when a valid entry is found in the write-through cache.
 
 ### authenticate
-`{ name: "authenticate", challenges }`
+`{ name: "authenticate", scope: "request", challenges }`
 
 Yielded when a `401 Unauthorized` response is received. The consumer should return `true` if authentication was handled and the request should be retried.
 
 ### retry
-`{ name: "retry", request }`
+`{ name: "retry", scope: "request", request }`
 
-Yielded before retrying a request. The consumer can provide a modified request to be used for the retry.
+Yielded before any retry attempt (including authentication, offline backoff, or HTTP retries).
+
+### error
+`{ name, scope: "request", error }`
+
+Yielded when an unrecoverable error occurs (e.g., invalid URL, or network failure while offline). `name` is the normalized error message.
 
 ### success
-`{ name: "success", request, response }`
+`{ name: "success", scope: "response", request, response }`
 
 Yielded when a successful response (2xx) is received.
 
 ### failure
-`{ name: "failure", request, response }`
+`{ name: "failure", scope: "response", request, response }`
 
-Yielded when a failure response (non-2xx) is received that was not handled by retries.
+Yielded when a failure response (non-2xx) is received that was not handled by retries, or for fatal pre-dispatch errors.
 
 ### [status]
-`{ name: status, request, response }`
+`{ name, scope: "response", request, response }`
 
-Yielded for any response, where `status` is the Sublime response description (e.g., "ok", "not found", "created").
+Yielded for any response, where `name` is the normalized Sublime response description (e.g., `ok`, `not-found`, `created`).
