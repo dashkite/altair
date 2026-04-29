@@ -169,12 +169,18 @@ export default ({ origin }) -> [
     assert.equal "no-content", name
     assert.equal "response", scope
     assert.equal 204, response.status
-
+  
     { done, value: { name }} = await advance events
     assert !done
     assert.equal "success", name
 
     { done } = await advance events
     assert done
+
+  subtest "yield from", ->
+    response = yield from HTTP.get { origin, target: "/status/200" }
+    assert response?
+    assert.equal 200, response.status
+    await return
 
 ]

@@ -22,6 +22,17 @@ export default ({ origin }) -> [
     { done } = await advance events
     assert done
 
+  subtest "yield from (server error)", ->
+    response = yield from HTTP.get { origin, target: "/status/404" }
+    assert response?
+    assert.equal 404, response.status
+    await return
+
+  subtest "yield from (pre-dispatch error)", ->
+    response = yield from HTTP.get { origin: "http://unknown" }
+    assert !response?
+    await return
+
   subtest "pre-dispatch (request) errors", ->
 
     events = HTTP.get {

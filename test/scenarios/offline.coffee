@@ -1,5 +1,5 @@
 import assert from "@dashkite/assert"
-# import { test } from "@dashkite/amen"
+import { test } from "@dashkite/amen"
 import { sleep } from "@dashkite/joy/time"
 import { start as run } from "@dashkite/river"
 import { Address, HTTP, subtest, advance, trace } from "./helpers"
@@ -40,7 +40,7 @@ export default ({ start, stop, port, origin }) -> [
     { done } = await advance events
     assert done
 
-  await subtest "failure if network remains offline", ->
+  await test "failure if network remains offline", wait: 5000, ->
 
     id = Address.make()
     
@@ -54,7 +54,6 @@ export default ({ start, stop, port, origin }) -> [
     
     # 2. We get repeated retries...
     
-    # stop at 3 because otw test will time out due to backoff
     for i in [1..3]
       { done, value: { name }} = await advance events
       assert.equal "retry", name

@@ -21,8 +21,13 @@ export default ( context ) ->
     await do pipe [
       Mimic.browser
       Mimic.page
-      Mimic.console Mimic.report.console
-      Mimic.error Mimic.report.error
+      if process.env.debug?
+        pipe [
+          Mimic.console Mimic.report.console
+          Mimic.error Mimic.report.error
+        ]
+      else
+        K.peek ->
       Mimic.goto "http://localhost:#{ port }/test/index.html"
       # ensure the page is loaded and JavaScript has executed
       Mimic.waitFor ( -> window.test? ), timeout: 5000
@@ -33,6 +38,7 @@ export default ( context ) ->
       # the browser because they require signaling back from
       # the tests to change the emulation
       K.peek ( _results ) -> results = _results
+      # bring the browser back to the top of the stack...
       K.down
       Mimic.close
     ]

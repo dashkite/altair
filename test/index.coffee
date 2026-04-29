@@ -4,6 +4,7 @@ import node from "./node"
 import mimic from "./mimic"
 
 import express from "express"
+import { sleep } from "@dashkite/joy/time"
 import { test } from "@dashkite/amen"
 import print from "@dashkite/amen-console"
 
@@ -28,3 +29,7 @@ do ->
     test "Browser", await mimic context
   ]
 
+  # make sure we exit even if we have pending reactors
+  # or other scheduled events to avoid hanging
+  await sleep 500
+  process.exit()
