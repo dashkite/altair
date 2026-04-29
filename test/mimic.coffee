@@ -29,8 +29,9 @@ export default ( context ) ->
       Mimic.evaluate ->
         await window.test.parallel.run()
         window.test.results
-      # Note: we are currently ignoring sequential tests in the browser 
-      # because they require server manipulation which is complex over the bridge.
+      # Note: we are currently ignoring sequential tests in
+      # the browser because they require signaling back from
+      # the tests to change the emulation
       K.peek ( _results ) -> results = _results
       K.down
       Mimic.close

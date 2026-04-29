@@ -9,6 +9,15 @@ The test suite is partitioned into two main groups to ensure reliability and per
 - **Parallel Scenarios**: The majority of tests (core methods, caching, retries, etc.) run concurrently using `Amen`'s parallel execution capabilities.
 - **Sequential Scenarios**: Tests that require exclusive access to shared resources—specifically the global `navigator` state and the test server (for offline mode simulations)—are run one at a time after the parallel suite completes.
 
+### Cross-Platform Execution
+
+Altair is a universal module, and its test suite is designed to run in both Node.js and the browser to ensure consistent behavior across environments.
+
+- **Node.js**: Tests run using the standard `Amen` runner. A global `fetch` implementation (via `undici`) and a mock `navigator` object are provided to simulate the browser environment.
+- **Browser**: Tests are executed in a headless Chromium instance using [Mimic](https://github.com/dashkite/mimic). This ensures that Altair correctly handles browser-specific APIs and behaviors (like the Cache API used for write-through caching).
+
+The `test/index.coffee` runner orchestrates both environments, running the Node suite first followed by the browser suite.
+
 ### Directory Structure
 
 - `test/index.coffee`: The top-level runner responsible for starting the server and orchestrating the parallel and sequential runs.

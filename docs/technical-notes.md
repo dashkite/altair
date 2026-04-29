@@ -5,6 +5,7 @@
 Altair implements an optimistic write-through cache to improve perceived performance and support immediate application updates.
 
 - **Populating**: When a `put` request is initiated, Altair automatically creates a synthetic `get` entry in the local `altair` cache store. This entry uses the request's content as its body and is marked with an `ok` status.
+- **Assumptions**: The write-through strategy assumes that the `put` request's body content is identical to the content that would be returned by a subsequent `get` request for the same resource.
 - **Invalidating**: When a `delete` request is initiated, Altair immediately removes the corresponding `get` entry from the cache.
 - **Cleanup**: Once a `put` or `delete` request lifecycle ends (either through success or fatal failure), Altair removes any synthetic entries to ensure the application returns to standard HTTP caching semantics provided by the server.
 
@@ -16,7 +17,7 @@ Altair uses a collaborative, reactive protocol for handling authentication chall
 - **Challenge Payload**: The `authenticate` event contains a `challenges` property, which is a list of authentication schemes and parameters provided by the server's `WWW-Authenticate` header.
 - **Consumer Responsibility**: The consumer of the reactor is responsible for handling the `authenticate` event. This typically involves updating the `@dashkite/registry` with appropriate credentials or authorizers.
 - **Retry Signal**: After handling the challenge, the consumer resumes the generator by passing `true`.
-- **Rebuilding the Request**: Upon receiving `true`, Altair rebuilds the request. It uses [Sublime](https://github.com/dashkite/sublime) to automatically find the correct authorizer in the `Registry` (matching the server's challenges) and inject the required headers into the new request attempt.
+- **Rebuilding the Request**: Upon receiving `true`, Altair rebuilds the request. It uses the protocol (e.g., Sublime) to automatically find the correct authorizer in the `Registry` (matching the server's challenges) and inject the required headers into the new request attempt.
 - **Retry Attempt**: Altair yields a `retry` event and dispatches the newly authorized request.
 
 This protocol ensures that Altair never needs to "know" about specific tokens or passwords; it simply identifies the need for authorization and provides the hook for the application to fulfill it.
