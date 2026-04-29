@@ -1,5 +1,5 @@
 import assert from "@dashkite/assert"
-import { HTTP, subtest, advance } from "./helpers"
+import { HTTP, subtest, advance, trace } from "./helpers"
 
 export default ({ origin }) -> [
 
@@ -161,14 +161,14 @@ export default ({ origin }) -> [
   subtest "options", ->
     events = HTTP.options {
       origin
-      target: "/status/200"
+      target: "/status/204"
     }
     
     { done, value: { name, scope, response }} = await advance events
     assert !done
-    assert.equal "ok", name
+    assert.equal "no-content", name
     assert.equal "response", scope
-    assert.equal 200, response.status
+    assert.equal 204, response.status
 
     { done, value: { name }} = await advance events
     assert !done

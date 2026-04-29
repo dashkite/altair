@@ -9,14 +9,14 @@ setEntryExpiration = ( url ) ->
 
 Cache =
   get: ( context ) ->
-    VegaCache ?= await window.caches.open "vega-client"
+    VegaCache ?= await caches.open "vega-client"
     await VegaCache.match context.url.href
   
   matches: ( context ) ->
     ( await Cache.get context )?
 
   put: ( context ) ->
-    VegaCache ?= await window.caches.open "vega-client"
+    VegaCache ?= await caches.open "vega-client"
     url = context.url.href
     body = context.body
     headers = 
@@ -28,7 +28,7 @@ Cache =
     return  # Don't return above promise
 
   delete: ( context ) ->
-    VegaCache ?= await window.caches.open "vega-client"
+    VegaCache ?= await caches.open "vega-client"
     url = context.url.href
     VegaCache.delete url
   

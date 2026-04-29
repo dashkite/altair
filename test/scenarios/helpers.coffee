@@ -24,6 +24,8 @@ subtest = ( description, action ) ->
 advance = ( events, options = { throw: true }) ->
   { done, value } = await events.next options.next
   if value?.error? && options.throw
+    # consume the rest of the events so we don't hang
+    start events
     throw value.error
   { done, value }
 

@@ -12,7 +12,6 @@ export default ({ start, stop, port, origin }) -> [
     
     # 1. Start offline by stopping server and toggling navigator
     await stop()
-    globalThis.navigator.onLine = false
     
     events = HTTP.get {
       origin
@@ -26,8 +25,7 @@ export default ({ start, stop, port, origin }) -> [
     assert.equal "request", scope
     
     # 3. Restore network and restart server
-    globalThis.navigator.onLine = true
-    await start port
+    await start()
     
     # 4. Resume and succeed
     { done, value: { name, scope }} = await advance events
@@ -42,28 +40,28 @@ export default ({ start, stop, port, origin }) -> [
     { done } = await advance events
     assert done
 
-    await run events
-
   await subtest "failure if network remains offline", ->
 
     id = Address.make()
     
     # 1. Start and stay offline
     await stop()
-    globalThis.navigator.onLine = false
     
     events = HTTP.get {
       origin
       target: "/status/200/#{ id }"
     }
     
-    # Verify at least one retry occurs
-    { done, value: { name }} = await advance events
-    assert.equal "retry", name
+    # 2. We get repeated retries...
+    
+    # stop at 3 because otw test will time out due to backoff
+    for i in [1..3]
+      { done, value: { name }} = await advance events
+      assert.equal "retry", name
     
     # Then restore so we can finish and clean up
-    globalThis.navigator.onLine = true
-    await start port
+    await start()
+
     run events
 
 ]

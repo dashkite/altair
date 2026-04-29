@@ -1,53 +1,30 @@
-# set up fetch API
-import "@dashkite/altair/install"
+# IMPORTANT: We need to load the node test before anything
+# else to ensure that global Fetch API is property installed
+import node from "./node"
+import mimic from "./mimic"
 
-globalThis.navigator ?= onLine: true
-
+import express from "express"
 import { test } from "@dashkite/amen"
 import print from "@dashkite/amen-console"
 
-
-import { start, stop } from "./server"
-import scenarios from "./scenarios"
-import offline from "./scenarios/offline"
+import Server from "./server"
+import api from "./server/api"
 
 import { scheme, domain, port } from "./configuration"
 
+Server.add "api", { app: api, port }
+Server.add "static", 
+  app: express().use ( express.static "./build/browser" )
+  port: port + 1
+
 context = { 
-  scheme
-  domain
-  port
+  scheme, domain, port
   origin: "#{ scheme }://#{ domain }:#{ port }"
-  start
-  stop
 }
 
 do ->
-
-  print await test "Altair", await do ->
-
-    { parallel, sequential } = await scenarios()
-
-    results = []
-
-    try
-
-      await start port
-
-      for name, runner of parallel
-        results.push test name, runner context
-
-      await Promise.all results
-
-      for name, runner of sequential
-        results.push await test name, 
-          await runner context
-
-    catch error
-      throw error
-
-    finally
-      await stop()
-
-    results
+  print await test "Altair", [
+    test "Node", await node context
+    test "Browser", await mimic context
+  ]
 

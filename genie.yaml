@@ -1,8 +1,22 @@
+coffee:
+  targets:
+    node:
+      - glob: "{src,test}/**/*.coffee"
+    browser:
+      - glob: 
+         - "{src,test}/**/*.coffee"
+
 pug:
   targets:
     browser:
       - preset: html
         glob: "{src,test}/**/*.pug"
+
+atlas:
+  build: ./build/browser
+  target: ./build/browser/test/index.html
+  entries:
+    - ./build/browser/test/browser.js
 
 media:
   targets:

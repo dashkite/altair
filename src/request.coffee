@@ -16,7 +16,10 @@ Metal =
   run: do ( convert = Fn.curry Fn.binary convert ) ->
     Fn.pipe  [
       convert to: "fetch"
-      fetch
+      # IMPORTANT: we can't pass fetch as a standalone
+      # function because it gets implicitly called as
+      # `window.fetch` in the browser
+      ( request ) -> fetch request
       convert to: "sublime"
     ]  
 

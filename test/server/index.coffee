@@ -1,111 +1,33 @@
-import express from "express"
-import { sleep } from "@dashkite/joy/time"
+class Server
 
-app = express()
+  @servers = {}
 
-  .use express.json()
-  .use express.text()
+  @make: ({ app, port }) -> Object.assign ( new @ ), { app, port }
 
-  .get "/status/:code/:id", ( request, response ) ->
-    { id } = request.params
-    response.status( parseInt request.params.code ).json { id }
+  @add: ( name, app ) -> @servers[ name ] = @make app
 
-  .get "/status/:code", ( request, response ) ->
-    response.status( parseInt request.params.code ).send()
+  @start: ( names, port ) ->
+    Promise.all do =>
+      for name in names
+        @servers[ name ].start()
 
-  .put "/status/:code/:id", ( request, response ) ->
-    { id } = request.params
-    response.status( parseInt request.params.code ).json { id }
+  @stop: ( names ) -> 
+    Promise.all do =>
+      for name in names
+        @servers[ name ].stop()
 
-  .put "/status/:code", ( request, response ) ->
-    response.status( parseInt request.params.code ).send()
+  start: ->
+    { promise, resolve, @reject } = Promise.withResolvers()
+    @server = @app.listen @port, resolve
+    @server.on "error", ( error ) => @reject()
+    promise
 
-  .post "/status/:code", ( request, response ) ->
-    if request.params.code == "201"
-      response.set "location", "/status/200/9999"
-    response.status( parseInt request.params.code ).send()
+  stop: ->
+    if @server?
+      @server.closeAllConnections()
+      { promise, resolve, @reject } = Promise.withResolvers()
+      @server.close resolve
+      @server = undefined
+      promise
 
-  .patch "/status/:code", ( request, response ) ->
-    response.status( parseInt request.params.code ).send()
-
-  .head "/status/:code", ( request, response ) ->
-    response.status( parseInt request.params.code ).send()
-
-  .options "/status/:code", ( request, response ) ->
-    response.status( parseInt request.params.code ).send()
-
-  .delete "/status/:code", ( request, response ) ->
-    response.status( parseInt request.params.code ).send()
-
-  .get "/always-unauthorized", ( request, response ) ->
-    response.set "www-authenticate", "Bearer"
-    response.status( 401 ).send()
-
-  .get "/json", ( request, response ) ->
-    response.status( 200 ).json { greeting: { from: "Yours Truly" } }
-
-  .get "/authorization", ( request, response ) ->
-    if request.headers.authorization == "bearer secret"
-      response.status( 200 ).json { message: "success" }
-    else
-      response.set "www-authenticate", "Bearer"
-      response.status( 401 ).send()
-
-  .get "/too-many-requests/:id", do ( counts = {}) -> 
-    ( request, response ) ->
-      { id } = request.params
-      counts[ id ] ?= 0
-      if (( counts[ id ] % 2 ) == 0 )
-        response.status( 429 ).send()
-      else
-        response.status( 200 ).json { message: "success", id }
-      counts[ id ]++
-
-  .get "/gateway-timeout/:id", do ( counts = {}) -> 
-    ( request, response ) ->
-      { id } = request.params
-      counts[ id ] ?= 0
-      if (( counts[ id ] % 2 ) == 0 )
-        response.status( 504 ).send()
-      else
-        response.status( 200 ).json { message: "success", id }
-      counts[ id ]++
-
-  .get "/flakey/:id", do ( counts = {}) -> 
-    ( request, response ) ->
-      { id } = request.params
-      counts[ id ] ?= 0
-      if counts[ id ]++ % 2 == 0
-        response.status( 503 ).send()
-      else
-        response.status( 200 ).json { message: "success", id }
-
-  .get "/malformed-json", ( request, response ) ->
-    response
-      .status 200
-      .set "content-type", "application/json"
-      .send "{ invalid: json "
-
-  .get "/delay/:ms/:id", ( request, response ) ->
-    response
-      .status 200
-      .json id: request.params.id
-
-  .put "/delay/:ms/:id", ( request, response ) ->
-    delay = parseInt request.params.ms
-    await sleep delay
-    response
-      .status 200
-      .json id: request.params.id
-
-server = undefined
-
-start = ( port ) ->
-  new Promise ( resolve ) ->
-    server = app.listen port, -> resolve()
-
-stop = ->
-  new Promise ( resolve ) ->
-    server.close -> resolve()
-
-export { start, stop }
+export default Server

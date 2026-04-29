@@ -1,11 +1,29 @@
+import "./core-methods"
+import "./error-handling"
+import "./concurrency"
+import "./unauthorized"
+import "./retries"
+import "./caching"
+import "./sublime-errors"
+import "./offline"
+
+load = ( names ) ->
+  results = {}
+  for name in names
+    path = "./#{ name }"
+    results[ name ] = ( await import( path )).default
+  results
+
 export default ->
-  parallel:
-    "core methods": ( await import( "./core-methods" ) ).default
-    "error-handling": ( await import( "./error-handling" ) ).default
-    "concurrency": ( await import( "./concurrency" ) ).default
-    "unauthorized": ( await import( "./unauthorized" ) ).default
-    "retries": ( await import( "./retries" ) ).default
-    "caching": ( await import( "./caching" ) ).default
-    "sublime errors": ( await import( "./sublime-errors" ) ).default
-  sequential:
-    "offline": ( await import( "./offline" ) ).default
+  parallel: await load [
+    "core-methods"
+    "error-handling"
+    "concurrency"
+    "unauthorized"
+    "retries"
+    "caching"
+    "sublime-errors"
+  ]
+  sequential: await load [
+    "offline"
+  ]
