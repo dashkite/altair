@@ -56,9 +56,10 @@ response = yield from HTTP.get
 # Handling specific events
 for await event from HTTP.get { origin, target: "/resource" }
   switch event.name
-    when "cache-hit" then console.log "Serving from cache..."
-    when "retry"     then console.log "Retrying request..."
-    when "success"   then console.log "Request succeeded!"
+    when "cache-hit"  then console.log "Serving from cache..."
+    when "cache-miss" then console.log "Cache miss, fetching from network..."
+    when "retry"      then console.log "Retrying request..."
+    when "success"    then console.log "Request succeeded!"
 ```
 
 ### Handling Challenges

@@ -25,13 +25,19 @@ export default ({ origin }) -> [
       authorization: [ "bearer" ]
     }
 
-    # 1. Initial request fails with unauthorized
+    # 1. Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
+    # 2. Initial request fails with unauthorized
     { done, value: { name, scope }} = await advance events
     assert !done
     assert.equal "unauthorized", name
     assert.equal "response", scope
 
-    # 2. Generator asks to authenticate
+    # 3. Generator asks to authenticate
     { done, value: { name, scope }} = await advance events
     assert !done
     assert.equal "authenticate", name
@@ -70,6 +76,12 @@ export default ({ origin }) -> [
     
     # Default limit for Retry.Counter is 3
     for i in [ 1..3 ]
+
+      if i == 1
+        { done, value: { name, scope }} = await advance events
+        assert !done
+        assert.equal "cache-miss", name
+        assert.equal "request", scope
 
       # Unauthorized attempt
       { done, value: { name, scope }} = await advance events

@@ -48,6 +48,11 @@ Altair yields event objects with the following schema:
 
 Yielded when a valid entry is found in the write-through cache.
 
+### cache-miss
+`{ name: "cache-miss", scope: "request", request }`
+
+Yielded when no valid entry is found in the write-through cache.
+
 ### authenticate
 `{ name: "authenticate", scope: "request", challenges }`
 
@@ -89,24 +94,27 @@ Altair reactors yield a predictable sequence of events depending on the outcome 
 4. [terminates with response]
 
 ### Successful Network Request
-1. `ok` (scope: `response`)
-2. `success` (scope: `response`)
-3. [terminates with response]
+1. `cache-miss` (scope: `request`)
+2. `ok` (scope: `response`)
+3. `success` (scope: `response`)
+4. [terminates with response]
 
 ### Authentication Flow
-1. `unauthorized` (scope: `response`)
-2. `authenticate` (scope: `request`)
-3. [waits for consumer signal]
+1. `cache-miss` (scope: `request`)
+2. `unauthorized` (scope: `response`)
+3. `authenticate` (scope: `request`)
+4. [waits for consumer signal]
+5. `retry` (scope: `request`)
+6. `ok` (scope: `response`)
+7. `success` (scope: `response`)
+8. [terminates with response]
+
+### Offline Backoff
+1. `cache-miss` (scope: `request`)
+2. `retry` (scope: `request`)
+3. [waits for network/backoff]
 4. `retry` (scope: `request`)
+...
 5. `ok` (scope: `response`)
 6. `success` (scope: `response`)
 7. [terminates with response]
-
-### Offline Backoff
-1. `retry` (scope: `request`)
-2. [waits for network/backoff]
-3. `retry` (scope: `request`)
-...
-4. `ok` (scope: `response`)
-5. `success` (scope: `response`)
-6. [terminates with response]

@@ -48,9 +48,10 @@ export default ({ origin }) -> [
       origin
       target: "/delay/200/#{ id }"
     }
-    { done, value: { name }} = await advance events
+    { done, value: { name, scope }} = await advance events
     assert !done
-    assert.notEqual "cache-hit", name
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
     await start events
 
   subtest "delete clears cache", ->
@@ -79,9 +80,10 @@ export default ({ origin }) -> [
       target: "/delay/200/#{ id }"
     }
 
-    { done, value: { name }} = await advance events
+    { done, value: { name, scope }} = await advance events
     assert !done
-    assert.notEqual "cache-hit", name
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
 
     # finish the GET and the pending DELETE
     Promise.all [

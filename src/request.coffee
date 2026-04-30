@@ -64,6 +64,8 @@ request = ( sublime ) ->
 
           else
 
+            yield { name: "cache-miss", scope, request }
+
             retries =
               offline: Retry.Backoff.make()
               unauthorized: Retry.Counter.make()

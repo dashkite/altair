@@ -34,6 +34,10 @@ export default ({ origin }) -> [
       target: "/malformed-json"
     }
 
+    # 0. Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert.equal "cache-miss", name
+
     # 1. Yields initial ok
     { done, value: { name, response }} = await advance events
     assert.equal "ok", name

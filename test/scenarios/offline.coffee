@@ -17,7 +17,13 @@ export default ({ start, stop, port, origin }) -> [
       origin
       target: "/status/200/#{ id }"
     }
-    
+
+    # 0. Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     # 2. Should yield retry (from offline backoff)
     { done, value: { name, scope }} = await advance events
     assert !done
@@ -52,6 +58,12 @@ export default ({ start, stop, port, origin }) -> [
       target: "/status/200/#{ id }"
     }
     
+    # 0. Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     # 2. We get repeated retries...
     
     for i in [1..3]

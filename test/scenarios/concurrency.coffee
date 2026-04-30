@@ -16,6 +16,12 @@ export default ({ origin }) -> [
             target: "/status/200/#{ i }"
           }
           
+          # Cache miss
+          { done, value: { name, scope }} = await advance events
+          assert !done
+          assert.equal "cache-miss", name
+          assert.equal "request", scope
+
           { done, value: { name, response }} = await advance events
           assert !done
           assert.equal "ok", name

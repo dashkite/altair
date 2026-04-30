@@ -6,6 +6,7 @@ Altair implements an optimistic write-through cache to improve perceived perform
 
 - **Populating**: When a `put` request is initiated, Altair automatically creates a synthetic `get` entry in the local `altair` cache store. This entry uses the request's content as its body and is marked with an `ok` status.
 - **Assumptions**: The write-through strategy assumes that the `put` request's body content is identical to the content that would be returned by a subsequent `get` request for the same resource.
+- **Detection**: Every `get` request first checks the cache. Altair yields a `cache-hit` if the resource is found, otherwise it yields a `cache-miss` before proceeding to the network.
 - **Invalidating**: When a `delete` request is initiated, Altair immediately removes the corresponding `get` entry from the cache.
 - **Cleanup**: Once a `put` or `delete` request lifecycle ends (either through success or fatal failure), Altair removes any synthetic entries to ensure the application returns to standard HTTP caching semantics provided by the server.
 

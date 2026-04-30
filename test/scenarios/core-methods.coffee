@@ -10,6 +10,12 @@ export default ({ origin }) -> [
       target: "/status/200" 
     }
 
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     
     assert !done
@@ -29,6 +35,12 @@ export default ({ origin }) -> [
       origin
       target: "/status/201"
     }
+
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
 
     { done, value: { name, scope, response }} = await advance events
     assert !done
@@ -50,6 +62,12 @@ export default ({ origin }) -> [
       target: "/status/200"
     }
     
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     assert !done
     assert.equal "ok", name
@@ -69,6 +87,12 @@ export default ({ origin }) -> [
       target: "/status/201"
     }
     
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     assert !done
     assert.equal "created", name
@@ -88,6 +112,12 @@ export default ({ origin }) -> [
       target: "/status/200"
     }
     
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     assert !done
     assert.equal "ok", name
@@ -107,6 +137,12 @@ export default ({ origin }) -> [
       target: "/status/204"
     }
     
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     assert !done
     assert.equal "no-content", name
@@ -126,6 +162,12 @@ export default ({ origin }) -> [
       target: "/status/200"
     }
     
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     assert !done
     assert.equal "ok", name
@@ -145,6 +187,12 @@ export default ({ origin }) -> [
       target: "/status/200"
     }
     
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     assert !done
     assert.equal "ok", name
@@ -164,6 +212,12 @@ export default ({ origin }) -> [
       target: "/status/204"
     }
     
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope, response }} = await advance events
     assert !done
     assert.equal "no-content", name

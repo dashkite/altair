@@ -9,6 +9,12 @@ export default ({ origin }) -> [
       target: "/flakey/server-error"
     }
     
+    # 0. Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     # 1. First attempt fails (503), yields retry
     { done, value: { name, scope }} = await advance events
     assert !done
@@ -36,6 +42,12 @@ export default ({ origin }) -> [
       target: "/too-many-requests/retries"
     }
     
+    # 0. Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     # 1. First attempt fails (429), yields retry
     { done, value: { name, scope }} = await advance events
     assert !done
@@ -63,6 +75,12 @@ export default ({ origin }) -> [
       target: "/gateway-timeout/retries"
     }
     
+    # 0. Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     # 1. First attempt fails (504), yields retry
     { done, value: { name, scope }} = await advance events
     assert !done

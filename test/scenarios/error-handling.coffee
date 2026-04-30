@@ -9,6 +9,12 @@ export default ({ origin }) -> [
       target: "/status/404"
     }
 
+    # Cache miss
+    { done, value: { name, scope }} = await advance events
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
+
     { done, value: { name, scope }} = await advance events
     assert !done
     assert.equal "not-found", name
@@ -39,6 +45,12 @@ export default ({ origin }) -> [
       origin: "http://unknown"
       target: "/status/200"
     }
+
+    # Cache miss
+    { done, value: { name, scope }} = await advance events, throw: false
+    assert !done
+    assert.equal "cache-miss", name
+    assert.equal "request", scope
 
     { done, value: { name, scope }} = 
       await advance events, throw: false
