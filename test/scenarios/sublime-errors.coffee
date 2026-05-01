@@ -1,5 +1,6 @@
 import assert from "@dashkite/assert"
 import { HTTP, subtest, advance } from "./helpers"
+import Events from "./events"
 
 export default ({ origin }) -> [
 
@@ -13,20 +14,12 @@ export default ({ origin }) -> [
       authorization: "not an array"
     }
 
-    # This should yield the normalized error event
-    { done, value: { name, scope }} = await advance events, throw: false
-    assert !done
-    assert.equal "ill-formed-authorization", name
-    assert.equal "request", scope
-
-    # The outer catch block now also yields failure
-    { done, value: { name, scope }} = await advance events, throw: false
-    assert !done
-    assert.equal "failure", name
-    assert.equal "request", scope
-
-    { done } = await advance events
-    assert done
+    # This should yield the normalized error event and failure
+    await advance events, [
+      { throw: false, Events[ "ill-formed-authorization" ]... }
+      { throw: false, Events[ "request-failure" ]... }
+      "done"
+    ]
 
   subtest "malformed response content", ->
     events = HTTP.get {
@@ -35,12 +28,10 @@ export default ({ origin }) -> [
     }
 
     # 0. Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert.equal "cache-miss", name
+    await advance events, "cache-miss"
 
     # 1. Yields initial ok
-    { done, value: { name, response }} = await advance events
-    assert.equal "ok", name
+    { value: { response }} = await advance events, "ok"
 
     # 2. Accessing content forces parsing
     try
@@ -52,9 +43,7 @@ export default ({ origin }) -> [
     # Note: Altair doesn't catch errors from the value object itself 
     # once it's been yielded to the client. This test verifies that
     # malformed content is indeed detectable.
-    
-    await advance events # success
-    { done } = await advance events
-    assert done
+
+    await advance events, [ "success", "done" ]
 
 ]

@@ -33,25 +33,48 @@ To maintain a consistent and readable test style, use the utilities provided in 
 - `advance`: An imperative helper for moving a generator forward. It automatically detects and throws unexpected errors unless explicitly told not to.
 - `HTTP`: A pre-configured Altair instance using standard Sublime and SkySublime rules.
 
-## The Imperative Advancement Pattern
+## The Declarative Advancement Pattern
 
-Most tests follow an "imperative advancement" pattern to verify the exact sequence of events:
+Most tests follow a declarative "advancement" pattern to verify the exact sequence of events. You can use shorthand string keys to match common events, which are defined in `test/scenarios/events.yaml`.
 
 ```coffee
 # 1. Initiate the request
 events = HTTP.get { origin, target: "/status/200" }
 
-# 2. Assert each event in turn
-{ done, value } = await advance events
-assert.equal "ok", value.name
+# 2. Assert each event using shorthand names
+await advance events, "cache-miss"
 
-{ done, value } = await advance events
-assert.equal "success", value.name
+{ value: { response }} =
+  await advance events, "ok"
+assert.equal 200, response.status
 
-# 3. Verify completion
-{ done } = await advance events
-assert done
+# You can pass an array of event names
+await advance events, [
+  "success"
+  "done"
+]
 ```
+
+### Merging Options
+
+If you need to override or extend a named event specifier, pass an object with the `name` property:
+
+```coffee
+# Override 'throw' or provide 'next' values
+await advance events,
+  name: "retry"
+  next: true
+```
+
+### Common Event Names
+
+Commonly used event names from `events.yaml` include:
+
+- `cache-miss` / `cache-hit`
+- `ok` / `created` / `no-content`
+- `success` / `failure`
+- `retry`
+- `done` (matches `{ done: true }`)
 
 ## Adding New Tests
 

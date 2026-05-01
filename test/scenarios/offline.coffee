@@ -18,33 +18,14 @@ export default ({ start, stop, port, origin }) -> [
       target: "/status/200/#{ id }"
     }
 
-    # 0. Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
-
-    # 2. Should yield retry (from offline backoff)
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "retry", name
-    assert.equal "request", scope
+    # 0. Cache miss and initial retry
+    await advance events, [ "cache-miss", "retry" ]
     
     # 3. Restore network and restart server
     await start()
     
     # 4. Resume and succeed
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
-    
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-    
-    { done } = await advance events
-    assert done
+    await advance events, [ "ok", "success", "done" ]
 
   await test "failure if network remains offline", wait: 5000, ->
 
@@ -59,16 +40,10 @@ export default ({ start, stop, port, origin }) -> [
     }
     
     # 0. Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
     # 2. We get repeated retries...
-    
-    for i in [1..3]
-      { done, value: { name }} = await advance events
-      assert.equal "retry", name
+    await advance events, [ "retry", "retry", "retry" ]
     
     # Then restore so we can finish and clean up
     await start()

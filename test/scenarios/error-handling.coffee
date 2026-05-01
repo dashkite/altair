@@ -1,5 +1,6 @@
 import assert from "@dashkite/assert"
 import { HTTP, subtest, advance } from "./helpers"
+import Events from "./events"
 
 export default ({ origin }) -> [
 
@@ -10,23 +11,7 @@ export default ({ origin }) -> [
     }
 
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
-
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "not-found", name
-    assert.equal "response", scope
-
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "failure", name
-    assert.equal "response", scope
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "cache-miss", "not-found", "failure", "done" ]
 
   subtest "yield from (server error)", ->
     response = yield from HTTP.get { origin, target: "/status/404" }
@@ -47,23 +32,10 @@ export default ({ origin }) -> [
     }
 
     # Cache miss
-    { done, value: { name, scope }} = await advance events, throw: false
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
-
-    { done, value: { name, scope }} = 
-      await advance events, throw: false
-    assert !done
-    assert.equal "error", name
-    assert.equal "request", scope
-
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "failure", name
-    assert.equal "request", scope
-
-    { done } = await advance events
-    assert done
+    await advance events, [
+      { throw: false, Events[ "cache-miss" ]... }
+      { throw: false, Events[ "error" ]... }
+      "request-failure", "done"
+    ]
 
 ]

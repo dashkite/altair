@@ -11,24 +11,12 @@ export default ({ origin }) -> [
     }
 
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "post (created)", ->
     events = HTTP.post {
@@ -37,24 +25,13 @@ export default ({ origin }) -> [
     }
 
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "created", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "created"
     assert.equal 201, response.status
     assert.equal "/status/200/9999", response.headers.get "location"
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "put (ok)", ->
     events = HTTP.put {
@@ -63,23 +40,12 @@ export default ({ origin }) -> [
     }
     
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "put (created)", ->
     events = HTTP.put {
@@ -88,23 +54,12 @@ export default ({ origin }) -> [
     }
     
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "created", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "created"
     assert.equal 201, response.status
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "delete (ok)", ->
     events = HTTP.delete {
@@ -113,23 +68,12 @@ export default ({ origin }) -> [
     }
     
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "delete (no-content)", ->
     events = HTTP.delete {
@@ -138,23 +82,12 @@ export default ({ origin }) -> [
     }
     
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "no-content", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "no-content"
     assert.equal 204, response.status
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "patch", ->
     events = HTTP.patch {
@@ -163,23 +96,12 @@ export default ({ origin }) -> [
     }
     
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "head", ->
     events = HTTP.head {
@@ -188,23 +110,12 @@ export default ({ origin }) -> [
     }
     
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
 
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "options", ->
     events = HTTP.options {
@@ -213,23 +124,12 @@ export default ({ origin }) -> [
     }
     
     # Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "no-content", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "no-content"
     assert.equal 204, response.status
   
-    { done, value: { name }} = await advance events
-    assert !done
-    assert.equal "success", name
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "yield from", ->
     response = yield from HTTP.get { origin, target: "/status/200" }

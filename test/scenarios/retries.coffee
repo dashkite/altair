@@ -9,32 +9,14 @@ export default ({ origin }) -> [
       target: "/flakey/server-error"
     }
     
-    # 0. Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
-
-    # 1. First attempt fails (503), yields retry
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "retry", name
-    assert.equal "request", scope
+    # 0. Cache miss and first retry
+    await advance events, [ "cache-miss", "retry" ]
     
     # 2. Second attempt succeeds (200)
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
     
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "success", name
-    assert.equal "response", scope
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "too many requests (429)", ->
     events = HTTP.get {
@@ -42,32 +24,14 @@ export default ({ origin }) -> [
       target: "/too-many-requests/retries"
     }
     
-    # 0. Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
-
-    # 1. First attempt fails (429), yields retry
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "retry", name
-    assert.equal "request", scope
+    # 0. Cache miss and first retry
+    await advance events, [ "cache-miss", "retry" ]
     
     # 2. Second attempt succeeds (200)
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
     
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "success", name
-    assert.equal "response", scope
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "gateway timeout (504)", ->
     events = HTTP.get {
@@ -75,30 +39,12 @@ export default ({ origin }) -> [
       target: "/gateway-timeout/retries"
     }
     
-    # 0. Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
-
-    # 1. First attempt fails (504), yields retry
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "retry", name
-    assert.equal "request", scope
+    # 0. Cache miss and first retry
+    await advance events, [ "cache-miss", "retry" ]
     
     # 2. Second attempt succeeds (200)
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
     
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "success", name
-    assert.equal "response", scope
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 ]

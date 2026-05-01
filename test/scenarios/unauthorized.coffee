@@ -25,47 +25,20 @@ export default ({ origin }) -> [
       authorization: [ "bearer" ]
     }
 
-    # 1. Cache miss
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
-
-    # 2. Initial request fails with unauthorized
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "unauthorized", name
-    assert.equal "response", scope
-
-    # 3. Generator asks to authenticate
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "authenticate", name
-    assert.equal "request", scope
+    # 1. Cache miss, initial failure, and challenge
+    await advance events, [ "cache-miss", "unauthorized", "authenticate" ]
     
     # 3. We provide credentials
     secret = "secret"
 
     # Resume with 'true' to signal authentication success
-    { done, value: { name, scope }} = await advance events, next: true
-    assert !done
-    assert.equal "retry", name
-    assert.equal "request", scope
+    await advance events, name: "retry", next: true
 
     # 4. The retry succeeds
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "ok", name
-    assert.equal "response", scope
+    { value: { response }} = await advance events, "ok"
     assert.equal 200, response.status
 
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "success", name
-    assert.equal "response", scope
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "success", "done" ]
 
   subtest "retry exhaustion", ->
     events = HTTP.get {
@@ -78,42 +51,12 @@ export default ({ origin }) -> [
     for i in [ 1..3 ]
 
       if i == 1
-        { done, value: { name, scope }} = await advance events
-        assert !done
-        assert.equal "cache-miss", name
-        assert.equal "request", scope
+        await advance events, "cache-miss"
 
-      # Unauthorized attempt
-      { done, value: { name, scope }} = await advance events
-      assert !done
-      assert.equal "unauthorized", name
-      assert.equal "response", scope
-
-      # Request to authenticate
-      { done, value: { name, scope }} = await advance events
-      assert !done
-      assert.equal "authenticate", name
-      assert.equal "request", scope
-
-      # Resume with true to signal "retry"
-      { done, value: { name, scope }} = await advance events, next: true
-      assert !done
-      assert.equal "retry", name
-      assert.equal "request", scope
+      # Unauthorized attempt, challenge, and resume
+      await advance events, [ "unauthorized", "authenticate", { name: "retry", next: true }]
 
     # 4th attempt: it should NOT retry anymore
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "unauthorized", name
-    assert.equal "response", scope
-
-    # It should then yield failure
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "failure", name
-    assert.equal "response", scope
-
-    { done } = await advance events
-    assert done
+    await advance events, [ "unauthorized", "failure", "done" ]
 
 ]

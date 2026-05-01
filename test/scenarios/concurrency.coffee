@@ -17,20 +17,10 @@ export default ({ origin }) -> [
           }
           
           # Cache miss
-          { done, value: { name, scope }} = await advance events
-          assert !done
-          assert.equal "cache-miss", name
-          assert.equal "request", scope
+          await advance events, "cache-miss"
 
-          { done, value: { name, response }} = await advance events
-          assert !done
-          assert.equal "ok", name
+          { value: { response }} = await advance events, "ok"
           assert.equal i, response.content.id
 
-          { done, value: { name }} = await advance events
-          assert !done
-          assert.equal "success", name
-
-          { done } = await advance events
-          assert done
+          await advance events, [ "success", "done" ]
 ]

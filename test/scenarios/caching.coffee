@@ -3,6 +3,7 @@ import { sleep } from "@dashkite/joy/time"
 import { start } from "@dashkite/river"
 import { Address, HTTP, subtest, advance } from "./helpers"
 
+
 export default ({ origin }) -> [
 
   subtest "write-through hit", ->
@@ -24,21 +25,11 @@ export default ({ origin }) -> [
       target: "/delay/200/#{ id }"
     }
 
-    { done, value: { name, scope, response }} = await advance events
-    assert !done
-    assert.equal "cache-hit", name
-    assert.equal "request", scope
+    { value: { response }} = await advance events, "cache-hit"
     assert.equal id, response.content.id
 
     # cache-hit is followed by the response description and success
-    { value: { scope }} = await advance events # ok/description
-    assert.equal "response", scope
-    
-    { value: { scope }} = await advance events # success
-    assert.equal "response", scope
-    
-    { done } = await advance events
-    assert done
+    await advance events, [ "ok", "success", "done" ]
 
     # allow the original PUT to finish
     await pending
@@ -48,10 +39,7 @@ export default ({ origin }) -> [
       origin
       target: "/delay/200/#{ id }"
     }
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
     await start events
 
   subtest "delete clears cache", ->
@@ -80,10 +68,7 @@ export default ({ origin }) -> [
       target: "/delay/200/#{ id }"
     }
 
-    { done, value: { name, scope }} = await advance events
-    assert !done
-    assert.equal "cache-miss", name
-    assert.equal "request", scope
+    await advance events, "cache-miss"
 
     # finish the GET and the pending DELETE
     Promise.all [
@@ -102,6 +87,9 @@ export default ({ origin }) -> [
       content: content
     }
 
+    # Cache miss
+    await advance events, "cache-miss"
+
     # We might get retries depending on configuration, 
     # so we loop until we get 'failure'
     loop
@@ -110,12 +98,9 @@ export default ({ origin }) -> [
       if value.name == "failure"
         assert.equal "response", value.scope
         # Verify content is still available for recovery
-        actual = value.request.content
-        actual = JSON.parse actual if typeof actual == "string"
-        assert.deepEqual content, actual
+        assert.deepEqual content, value.request.content
         break
       
-    { done } = await advance events
-    assert done
+    await advance events, "done"
 
 ]

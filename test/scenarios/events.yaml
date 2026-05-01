@@ -1,0 +1,57 @@
+cache-miss:
+  name: cache-miss
+  scope: request
+  done: false
+ok:
+  name: ok
+  scope: response
+  done: false
+created:
+  name: created
+  scope: response
+  done: false
+no-content:
+  name: no-content
+  scope: response
+  done: false
+success:
+  name: success
+  done: false
+done:
+  done: true
+cache-hit:
+  name: cache-hit
+  scope: request
+  done: false
+not-found:
+  name: not-found
+  scope: response
+  done: false
+failure:
+  name: failure
+  scope: response
+  done: false
+request-failure:
+  name: failure
+  scope: request
+  done: false
+error:
+  name: error
+  scope: request
+  done: false
+retry:
+  name: retry
+  scope: request
+  done: false
+ill-formed-authorization:
+  name: ill-formed-authorization
+  scope: request
+  done: false
+unauthorized:
+  name: unauthorized
+  scope: response
+  done: false
+authenticate:
+  name: authenticate
+  scope: request
+  done: false
