@@ -59,7 +59,7 @@
     "@dashkite/genie-media": "^0.12.23",
     "@dashkite/genie-module": "^0.5.52",
     "@dashkite/genie-pug": "^0.4.1",
-    "@dashkite/genie-release": "^0.5.12",
+    "@dashkite/genie-release": "^0.5.10",
     "@dashkite/genie-yaml": "^0.8.0",
     "@dashkite/reactive": "^0.7.30",
     "@dashkite/registry": "^0.17.22",
