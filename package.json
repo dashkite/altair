@@ -41,11 +41,10 @@
     "release": "genie release"
   },
   "devDependencies": {
-
     "@dashkite/amen": "link:../amen",
     "@dashkite/amen-console": "0.8.12",
     "@dashkite/assert": "0.7.18",
-    "@dashkite/drn-sky": "0.8.17",
+    "@dashkite/drn-sky": "0.8.31",
     "@dashkite/genie": "0.20.14",
     "@dashkite/genie-atlas": "link:../genie-atlas",
     "@dashkite/genie-clean": "0.9.0",
@@ -58,7 +57,7 @@
     "@dashkite/genie-yaml": "0.8.0",
     "@dashkite/katana": "link:../katana",
     "@dashkite/mimic": "link:../mimic",
-    "@dashkite/reactive": "0.7.20",
+    "@dashkite/reactive": "0.7.33",
     "@dashkite/registry": "0.17.12",
     "@dashkite/river": "link:../river",
     "chalk": "4.1.2",
@@ -71,11 +70,10 @@
     "@dashkite/http-headers": "0.12.37",
     "@dashkite/joy": "link:../joy",
     "@dashkite/retry": "link:../retry",
-    "@dashkite/scout": "0.5.0",
+    "@dashkite/scout": "0.8.31",
     "@dashkite/sierra": "0.3.17",
     "@dashkite/sky-sublime": "link:../sky-sublime",
     "@dashkite/sublime": "link:../sublime",
     "undici": "8.1.0"
-
   }
 }
