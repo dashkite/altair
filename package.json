@@ -44,7 +44,7 @@
     "@dashkite/amen": "link:../amen",
     "@dashkite/amen-console": "0.8.12",
     "@dashkite/assert": "0.7.18",
-    "@dashkite/drn-sky": "0.8.31",
+    "@dashkite/drn-sky": "link:../drn-sky",
     "@dashkite/genie": "0.20.14",
     "@dashkite/genie-atlas": "link:../genie-atlas",
     "@dashkite/genie-clean": "0.9.0",
