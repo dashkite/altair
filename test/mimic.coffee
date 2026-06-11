@@ -24,7 +24,7 @@ export default ( context ) ->
       if process.env.debug?
         pipe [
           Mimic.console Mimic.report.console
-          Mimic.error Mimic.report.error
+          Mimic.error ( Mimic.report.error process.env.debug? )
         ]
       else
         K.peek ->
