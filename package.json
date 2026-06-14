@@ -59,7 +59,7 @@
     "@dashkite/mimic": "link:../mimic",
     "@dashkite/reactive": "0.7.33",
     "@dashkite/registry": "0.17.12",
-    "@dashkite/river": "link:../river",
+    "@dashkite/river": "^0.0.11",
     "chalk": "4.1.2",
     "cors": "2.8.5",
     "express": "5.1.0",
