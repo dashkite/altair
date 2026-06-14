@@ -68,7 +68,7 @@
   "dependencies": {
     "@dashkite/generic": "0.9.32",
     "@dashkite/http-headers": "0.12.37",
-    "@dashkite/joy": "link:../joy",
+    "@dashkite/joy": "^0.12.41",
     "@dashkite/retry": "^0.0.11",
     "@dashkite/scout": "0.8.31",
     "@dashkite/sierra": "0.3.17",
