@@ -41,7 +41,7 @@
     "release": "genie release"
   },
   "devDependencies": {
-    "@dashkite/amen": "link:../amen",
+    "@dashkite/amen": "^0.9.31",
     "@dashkite/amen-console": "0.8.12",
     "@dashkite/assert": "0.7.18",
     "@dashkite/drn-sky": "^0.8.34",
@@ -69,7 +69,7 @@
     "@dashkite/generic": "0.9.32",
     "@dashkite/http-headers": "0.12.37",
     "@dashkite/joy": "link:../joy",
-    "@dashkite/retry": "link:../retry",
+    "@dashkite/retry": "^0.0.11",
     "@dashkite/scout": "0.8.31",
     "@dashkite/sierra": "0.3.17",
     "@dashkite/sky-sublime": "link:../sky-sublime",
