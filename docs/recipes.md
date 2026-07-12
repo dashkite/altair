@@ -4,7 +4,7 @@
 
 Altair yields an `authenticate` event when the server returns a `401 Unauthorized`. Use an `EventCoroutine` to wait for credentials before signaling a retry.
 
-```coffee
+```coffeescript
 import EventCoroutine from "@dashkite/reactive/event-coroutine"
 
 # A reactor for an authorized request
@@ -25,7 +25,7 @@ response = await EventCoroutine
 
 To fulfill an `authenticate` request, provide an authorizer in the `@dashkite/registry` that matches the server's challenge scheme.
 
-```coffee
+```coffeescript
 import Registry from "@dashkite/registry"
 import Sierra from "@dashkite/sierra"
 
@@ -57,7 +57,7 @@ The reactive protocol automatically handles expired tokens. If a previously vali
 
 Use `put` or `delete` to optimistically update the cache. Subsequent `get` requests for the same resource will yield a `cache-hit` immediately, even if the original update is still in flight.
 
-```coffee
+```coffeescript
 # 1. Update the resource (takes some time)
 HTTP.put 
   origin: "https://api.example.com"
@@ -79,7 +79,7 @@ if value.name == "cache-hit"
 
 You can monitor the reactor to detect when a request has completely failed after all retries have been exhausted.
 
-```coffee
+```coffeescript
 import { collect } from "@dashkite/river"
 
 # Attempt a request that might fail

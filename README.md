@@ -6,7 +6,7 @@
 
 Altair is a reactive HTTP client that transforms standard request/response cycles into a stream of semantic events. It encapsulates the request-response lifecycle and models it as a reactor, relying on a provider that implements the [Sublime](https://github.com/dashkite/sublime) interface for HTTP.
 
-### Features
+## Features
 
 - Reactive Protocol: Methods return async generators yielding events like cache-hit, retry, authenticate, and normalized status names.
 - Write-Through Caching: Optimistically updates the local cache on put and delete operations for immediate HX updates, assuming the put body matches the future get response.
@@ -15,7 +15,9 @@ Altair is a reactive HTTP client that transforms standard request/response cycle
 
 ## Installation
 
-Use your favorite JavaScript package manager to install `@dashkite/altair`.
+```bash
+pnpm install @dashkite/altair
+```
 
 ## Usage
 
@@ -25,7 +27,7 @@ Altair methods return an async generator (reactor). You can either consume the e
 
 If you only care about the final response, you can use `yield from`:
 
-```coffee
+```coffeescript
 import { start } from "@dashkite/river"
 
 # Perform a simple GET request
@@ -47,7 +49,7 @@ Of course, for a case like this, it’s often simpler to just use `fetch`. Altai
 
 Use `yield from` to delegate to the reactor within another generator, or iterate over it to handle lifecycle events.
 
-```coffee
+```coffeescript
 # Within another reactor or async generator
 response = yield from HTTP.get 
   origin: "https://api.example.com" 
@@ -66,7 +68,7 @@ for await event from HTTP.get { origin, target: "/resource" }
 
 You can use a coroutine library like `@dashkite/reactive/event-coroutine` to handle specific lifecycle events like authentication challenges:
 
-```coffee
+```coffeescript
 import EventCoroutine from "@dashkite/reactive/event-coroutine"
 
 response = await EventCoroutine
@@ -85,7 +87,7 @@ Alternatively, you can manually iterate over the generator, passing `true` into 
 
 Altair encapsulates the request-response lifecycle and models it as a reactor., while Sublime defines an idealized interface for HTTP. Thus, to use Altair, you must provide it with an object that implements the Sublime interfaces. Of course, you can use the Sublime module itself:
 
-```coffee
+```coffeescript
 import Altair from "@dashkite/altair"
 import Sublime from "@dashkite/sublime"
 
@@ -102,7 +104,3 @@ HTTP = Altair.make().use sublime
 - [Recipes](docs/recipes.md)
 - [Technical Notes](docs/technical-notes.md)
 - [Testing Guide](docs/testing.md)
-
-## Status
-
-Not suitable for production use. Please report bugs and feature requests via the issue tracker.

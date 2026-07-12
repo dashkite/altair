@@ -37,7 +37,7 @@ To maintain a consistent and readable test style, use the utilities provided in 
 
 Most tests follow a declarative "advancement" pattern to verify the exact sequence of events. You can use shorthand string keys to match common events, which are defined in `test/scenarios/events.yaml`.
 
-```coffee
+```coffeescript
 # 1. Initiate the request
 events = HTTP.get { origin, target: "/status/200" }
 
@@ -59,7 +59,7 @@ await advance events, [
 
 If you need to override or extend a named event specifier, pass an object with the `name` property:
 
-```coffee
+```coffeescript
 # Override 'throw' or provide 'next' values
 await advance events,
   name: "retry"
