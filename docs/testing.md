@@ -84,10 +84,10 @@ Commonly used event names from `events.yaml` include:
 
 ## Running Tests
 
-Use the standard package manager command:
+Use the project task manager command:
 
 ```bash
-npm test
+npx genie test
 ```
 
 This will build the project and execute the top-level runner. Note that if the sequential tests fail or hang, they may leave the test server running; ensure you kill any lingering processes before restarting.

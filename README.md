@@ -23,6 +23,16 @@ pnpm install @dashkite/altair
 
 Altair methods return an async generator (reactor). You can either consume the events or simply wait for the final response.
 
+To use Altair, you must configure it with an object that implements the Sublime interfaces. 
+
+```coffeescript
+import Altair from "@dashkite/altair"
+import Sublime from "@dashkite/sublime"
+
+sublime = Sublime.make [ rulebase ]
+HTTP = Altair.make().use sublime
+```
+
 ### Basic Usage
 
 If you only care about the final response, you can use `yield from`:
@@ -40,10 +50,6 @@ start do ->
   response = yield from events
   console.log response.content
 ```
-
-(In this example, `start` is a function that “runs” a reactor without reducing its products. Any comparable function from another library would work just as well.)
-
-Of course, for a case like this, it’s often simpler to just use `fetch`. Altair’s real power is in its ability to support reactivity throught request-response lifecycle.
 
 ### Reactive Usage
 
@@ -79,23 +85,6 @@ response = await EventCoroutine
     # Logic to provide credentials...
     true # Signal that we should retry
   .start()
-```
-
-Alternatively, you can manually iterate over the generator, passing `true` into `.next()` to signal that a challenge has been handled and the request should be retried.
-
-## Configuration
-
-Altair encapsulates the request-response lifecycle and models it as a reactor., while Sublime defines an idealized interface for HTTP. Thus, to use Altair, you must provide it with an object that implements the Sublime interfaces. Of course, you can use the Sublime module itself:
-
-```coffeescript
-import Altair from "@dashkite/altair"
-import Sublime from "@dashkite/sublime"
-
-# 1. Create a Sublime instance with your preferred rules
-sublime = Sublime.make [ rulebase ]
-
-# 2. Configure Altair to use it
-HTTP = Altair.make().use sublime
 ```
 
 ## Other Resources
